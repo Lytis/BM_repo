@@ -1,0 +1,25 @@
+--cpu Cortex-M7.fp.dp
+"bm_fw\startup_stm32f767xx.o"
+"bm_fw\main.o"
+"bm_fw\stm32f7xx_it.o"
+"bm_fw\stm32f7xx_hal_msp.o"
+"bm_fw\stm32f7xx_hal_cortex.o"
+"bm_fw\stm32f7xx_hal_tim.o"
+"bm_fw\stm32f7xx_hal_tim_ex.o"
+"bm_fw\stm32f7xx_hal_rcc.o"
+"bm_fw\stm32f7xx_hal_rcc_ex.o"
+"bm_fw\stm32f7xx_hal_flash.o"
+"bm_fw\stm32f7xx_hal_flash_ex.o"
+"bm_fw\stm32f7xx_hal_gpio.o"
+"bm_fw\stm32f7xx_hal_dma.o"
+"bm_fw\stm32f7xx_hal_dma_ex.o"
+"bm_fw\stm32f7xx_hal_pwr.o"
+"bm_fw\stm32f7xx_hal_pwr_ex.o"
+"bm_fw\stm32f7xx_hal.o"
+"bm_fw\stm32f7xx_hal_i2c.o"
+"bm_fw\stm32f7xx_hal_i2c_ex.o"
+"bm_fw\system_stm32f7xx.o"
+--library_type=microlib --strict --scatter "BM_fw\BM_fw.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "BM_fw.map" -o BM_fw\BM_fw.axf
