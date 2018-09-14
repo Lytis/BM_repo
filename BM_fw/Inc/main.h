@@ -55,6 +55,12 @@
 #define CLK_OUT_EN_GPIO_Port GPIOF
 #define SPI5_DIR_Pin GPIO_PIN_8
 #define SPI5_DIR_GPIO_Port GPIOF
+#define RED_Pin GPIO_PIN_2
+#define RED_GPIO_Port GPIOG
+#define YELLOW_Pin GPIO_PIN_3
+#define YELLOW_GPIO_Port GPIOG
+#define GREEN_Pin GPIO_PIN_4
+#define GREEN_GPIO_Port GPIOG
 #define SPI3_DIR_Pin GPIO_PIN_11
 #define SPI3_DIR_GPIO_Port GPIOC
 #define UART4_DIR_Pin GPIO_PIN_0
