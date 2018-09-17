@@ -43,6 +43,8 @@ extern DMA_HandleTypeDef hdma_spi2_rx;
 
 extern DMA_HandleTypeDef hdma_spi3_rx;
 
+extern DMA_HandleTypeDef hdma_spi6_rx;
+
 extern void _Error_Handler(char *, int);
 /* USER CODE BEGIN 0 */
 
@@ -170,6 +172,48 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
 
   /* USER CODE END SPI3_MspInit 1 */
   }
+  else if(hspi->Instance==SPI6)
+  {
+  /* USER CODE BEGIN SPI6_MspInit 0 */
+
+  /* USER CODE END SPI6_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_SPI6_CLK_ENABLE();
+  
+    /**SPI6 GPIO Configuration    
+    PG13     ------> SPI6_SCK
+    PG14     ------> SPI6_MOSI 
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF5_SPI6;
+    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+    /* SPI6 DMA Init */
+    /* SPI6_RX Init */
+    hdma_spi6_rx.Instance = DMA2_Stream6;
+    hdma_spi6_rx.Init.Channel = DMA_CHANNEL_1;
+    hdma_spi6_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_spi6_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_spi6_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_spi6_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_spi6_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_spi6_rx.Init.Mode = DMA_CIRCULAR;
+    hdma_spi6_rx.Init.Priority = DMA_PRIORITY_HIGH;
+    hdma_spi6_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    if (HAL_DMA_Init(&hdma_spi6_rx) != HAL_OK)
+    {
+      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    __HAL_LINKDMA(hspi,hdmarx,hdma_spi6_rx);
+
+  /* USER CODE BEGIN SPI6_MspInit 1 */
+
+  /* USER CODE END SPI6_MspInit 1 */
+  }
 
 }
 
@@ -215,6 +259,26 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
   /* USER CODE BEGIN SPI3_MspDeInit 1 */
 
   /* USER CODE END SPI3_MspDeInit 1 */
+  }
+  else if(hspi->Instance==SPI6)
+  {
+  /* USER CODE BEGIN SPI6_MspDeInit 0 */
+
+  /* USER CODE END SPI6_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_SPI6_CLK_DISABLE();
+  
+    /**SPI6 GPIO Configuration    
+    PG13     ------> SPI6_SCK
+    PG14     ------> SPI6_MOSI 
+    */
+    HAL_GPIO_DeInit(GPIOG, GPIO_PIN_13|GPIO_PIN_14);
+
+    /* SPI6 DMA DeInit */
+    HAL_DMA_DeInit(hspi->hdmarx);
+  /* USER CODE BEGIN SPI6_MspDeInit 1 */
+
+  /* USER CODE END SPI6_MspDeInit 1 */
   }
 
 }

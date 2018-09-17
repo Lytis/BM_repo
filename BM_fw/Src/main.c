@@ -48,13 +48,15 @@
 
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
+SPI_HandleTypeDef hspi6;
 DMA_HandleTypeDef hdma_spi2_rx;
 DMA_HandleTypeDef hdma_spi3_rx;
+DMA_HandleTypeDef hdma_spi6_rx;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
-int16_t receiveBuffer3[66];
+int16_t receiveBuffer6[64];
 
 /* USER CODE END PV */
 
@@ -64,6 +66,7 @@ static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_SPI2_Init(void);
+static void MX_SPI6_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -106,6 +109,7 @@ int main(void)
   MX_DMA_Init();
   MX_SPI3_Init();
   MX_SPI2_Init();
+  MX_SPI6_Init();
   /* USER CODE BEGIN 2 */
 	
 
@@ -114,7 +118,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  HAL_SPI_Receive_DMA(&hspi2, (uint8_t*)receiveBuffer3, 66);
+  HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, 64);
 
   HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
   while (1)
@@ -247,6 +251,31 @@ static void MX_SPI3_Init(void)
 
 }
 
+/* SPI6 init function */
+static void MX_SPI6_Init(void)
+{
+
+  /* SPI6 parameter configuration*/
+  hspi6.Instance = SPI6;
+  hspi6.Init.Mode = SPI_MODE_SLAVE;
+  hspi6.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
+  hspi6.Init.DataSize = SPI_DATASIZE_16BIT;
+  hspi6.Init.CLKPolarity = SPI_POLARITY_HIGH;
+  hspi6.Init.CLKPhase = SPI_PHASE_2EDGE;
+  hspi6.Init.NSS = SPI_NSS_SOFT;
+  hspi6.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi6.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi6.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi6.Init.CRCPolynomial = 7;
+  hspi6.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi6.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+  if (HAL_SPI_Init(&hspi6) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
 /** 
   * Enable DMA controller clock
   */
@@ -254,6 +283,7 @@ static void MX_DMA_Init(void)
 {
   /* DMA controller clock enable */
   __HAL_RCC_DMA1_CLK_ENABLE();
+  __HAL_RCC_DMA2_CLK_ENABLE();
 
   /* DMA interrupt init */
   /* DMA1_Stream0_IRQn interrupt configuration */
@@ -262,6 +292,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+  /* DMA2_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
 
 }
 
