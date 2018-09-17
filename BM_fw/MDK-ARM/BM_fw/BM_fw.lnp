@@ -4,6 +4,7 @@
 "bm_fw\stm32f7xx_it.o"
 "bm_fw\stm32f7xx_hal_msp.o"
 "bm_fw\stm32f7xx_hal_cortex.o"
+"bm_fw\stm32f7xx_hal_spi.o"
 "bm_fw\stm32f7xx_hal_tim.o"
 "bm_fw\stm32f7xx_hal_tim_ex.o"
 "bm_fw\stm32f7xx_hal_rcc.o"

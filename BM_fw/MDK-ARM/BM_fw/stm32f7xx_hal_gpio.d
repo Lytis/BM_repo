@@ -28,3 +28,4 @@ bm_fw\stm32f7xx_hal_gpio.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2
 bm_fw\stm32f7xx_hal_gpio.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h
 bm_fw\stm32f7xx_hal_gpio.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h
 bm_fw\stm32f7xx_hal_gpio.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h
+bm_fw\stm32f7xx_hal_gpio.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_spi.h
