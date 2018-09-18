@@ -37,6 +37,11 @@
 
 /* USER CODE BEGIN 0 */
 
+
+extern SPI_HandleTypeDef hspi2;
+extern SPI_HandleTypeDef hspi3;
+extern SPI_HandleTypeDef hspi6;
+
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -240,6 +245,8 @@ void DMA2_Stream6_IRQHandler(void)
 
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
+  // see from which spi port is comming from
+  // save either to buffer or SDcard
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
 }
 
