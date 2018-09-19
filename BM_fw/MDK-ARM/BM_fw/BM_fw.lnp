@@ -1,9 +1,14 @@
 --cpu Cortex-M7.fp.dp
 "bm_fw\startup_stm32f767xx.o"
 "bm_fw\main.o"
+"bm_fw\bsp_driver_sd.o"
+"bm_fw\sd_diskio.o"
+"bm_fw\fatfs.o"
 "bm_fw\stm32f7xx_it.o"
 "bm_fw\stm32f7xx_hal_msp.o"
 "bm_fw\stm32f7xx_hal_cortex.o"
+"bm_fw\stm32f7xx_ll_sdmmc.o"
+"bm_fw\stm32f7xx_hal_sd.o"
 "bm_fw\stm32f7xx_hal_spi.o"
 "bm_fw\stm32f7xx_hal_tim.o"
 "bm_fw\stm32f7xx_hal_tim_ex.o"
@@ -20,6 +25,10 @@
 "bm_fw\stm32f7xx_hal_i2c.o"
 "bm_fw\stm32f7xx_hal_i2c_ex.o"
 "bm_fw\system_stm32f7xx.o"
+"bm_fw\syscall.o"
+"bm_fw\diskio.o"
+"bm_fw\ff.o"
+"bm_fw\ff_gen_drv.o"
 --library_type=microlib --strict --scatter "BM_fw\BM_fw.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

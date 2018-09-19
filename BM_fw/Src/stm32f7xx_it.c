@@ -45,6 +45,7 @@ extern SPI_HandleTypeDef hspi6;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_HandleTypeDef hdma_sdmmc2_tx;
 extern DMA_HandleTypeDef hdma_spi2_rx;
 extern DMA_HandleTypeDef hdma_spi3_rx;
 extern DMA_HandleTypeDef hdma_spi6_rx;
@@ -228,6 +229,20 @@ void DMA1_Stream1_IRQHandler(void)
 }
 
 /**
+* @brief This function handles DMA2 stream0 global interrupt.
+*/
+void DMA2_Stream0_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream0_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_sdmmc2_tx);
+  /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream0_IRQn 1 */
+}
+
+/**
 * @brief This function handles DMA2 stream6 global interrupt.
 */
 void DMA2_Stream6_IRQHandler(void)
@@ -243,15 +258,48 @@ void DMA2_Stream6_IRQHandler(void)
 
 /* USER CODE BEGIN 1 */
 
+int16_t storageBuffer[64];
+extern int16_t receiveBuffer6[64];
+int i;
+
+int fault_counter=0;
+
+
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
   // see from which spi port is comming from
   // save either to buffer or SDcard
+
+  for (i=0; i<32; i++)
+  {
+    storageBuffer[i] = receiveBuffer6[i];
+  }
+
+  for (i=0; i<32; i+=8)
+  {
+    if (receiveBuffer6[i] == 0xFFFF)
+      fault_counter++;
+  }
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
 }
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
+  for (i=32; i<64; i++)
+    storageBuffer[i] = receiveBuffer6[i];
+
+  for (i=32; i<64; i+=8)
+  {
+    if (receiveBuffer6[i] == 0xFFFF)
+      fault_counter++;
+  }
+  //store to SD
+  if (fault_counter>=100)
+  {
+    HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+    fault_counter = 0;
+  }
+
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
 }
 

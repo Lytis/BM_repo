@@ -4,47 +4,63 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  ** This notice applies to any and all portions of this file
+  * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
   * USER CODE END. Other portions of this file, whether 
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2018 STMicroelectronics
+  * Copyright (c) 2018 STMicroelectronics International N.V. 
+  * All rights reserved.
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
+  * Redistribution and use in source and binary forms, with or without 
+  * modification, are permitted, provided that the following conditions are met:
   *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * 1. Redistribution of source code must retain the above copyright notice, 
+  *    this list of conditions and the following disclaimer.
+  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  *    this list of conditions and the following disclaimer in the documentation
+  *    and/or other materials provided with the distribution.
+  * 3. Neither the name of STMicroelectronics nor the names of other 
+  *    contributors to this software may be used to endorse or promote products 
+  *    derived from this software without specific written permission.
+  * 4. This software, including modifications and/or derivative works of this 
+  *    software, must execute solely and exclusively on microcontroller or
+  *    microprocessor devices manufactured by or for STMicroelectronics.
+  * 5. Redistribution and use of this software other than as permitted under 
+  *    this license is void and will automatically terminate your rights under 
+  *    this license. 
+  *
+  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
+  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
+  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f7xx_hal.h"
+#include "fatfs.h"
 
 /* USER CODE BEGIN Includes */
+
+#include "ff.h"
 
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+
+SD_HandleTypeDef hsd2;
+DMA_HandleTypeDef hdma_sdmmc2_tx;
 
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
@@ -67,6 +83,7 @@ static void MX_DMA_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_SPI6_Init(void);
+static void MX_SDMMC2_SD_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -74,6 +91,11 @@ static void MX_SPI6_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+
+FATFS mynewdiskFatFs;
+FIL MyFile;
+char mynewdiskPath[4];
+
 
 /* USER CODE END 0 */
 
@@ -110,19 +132,83 @@ int main(void)
   MX_SPI3_Init();
   MX_SPI2_Init();
   MX_SPI6_Init();
+  MX_SDMMC2_SD_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
-	
+
+
+/* 
+  if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
+  {
+    if (f_open(&MyFile, "STREAM1.HEX", FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
+    {
+      HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+    }
+  }
+
+ */
+
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
+
   HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, 64);
 
   HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
+/* 
+  uint16_t test_buffer[8192] = {0};
+  uint16_t zero_buffer[8192] = {0};
+  uint16_t count = 0;
+
+  int i;
+	UINT *data_writen;
+
+  for (i=0; i<sizeof(test_buffer)/2; i++)
+  {
+    test_buffer[i] = (uint16_t)count;
+    count++;
+  }
+	
+	HAL_Delay(500);
+
+  for (i=0; i<10000; i++)
+  {
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+    if (FR_OK != f_write(&MyFile, zero_buffer, sizeof(zero_buffer), data_writen))
+    {
+      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+    }
+    
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+		HAL_Delay(1);
+  }
+
+  f_close(&MyFile);
+  HAL_Delay(1);
+  f_open(&MyFile, "STREAM1.HEX", FA_OPEN_EXISTING|FA_WRITE);
+  HAL_Delay(1);
+
+  for (i=0; i<10000; i++)
+  {
+    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
+    if (FR_OK != f_write(&MyFile, test_buffer, sizeof(test_buffer), data_writen))
+    {
+      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+    }
+    
+    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+		HAL_Delay(1);
+  }
+
+  f_close(&MyFile); */
+
   while (1)
   {
+		
+		//HAL_GPIO_TogglePin(YELLOW_GPIO_Port, YELLOW_Pin);
 
   /* USER CODE END WHILE */
 
@@ -142,6 +228,7 @@ void SystemClock_Config(void)
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
 
     /**Configure the main internal regulator output voltage 
     */
@@ -158,7 +245,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 6;
   RCC_OscInitStruct.PLL.PLLN = 210;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
@@ -185,6 +272,20 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SDMMC2|RCC_PERIPHCLK_CLK48;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 141;
+  PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
+  PeriphClkInitStruct.PLLSAI.PLLSAIQ = 2;
+  PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV6;
+  PeriphClkInitStruct.PLLSAIDivQ = 1;
+  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
+  PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48SOURCE_PLLSAIP;
+  PeriphClkInitStruct.Sdmmc2ClockSelection = RCC_SDMMC2CLKSOURCE_CLK48;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
 
   HAL_RCC_MCOConfig(RCC_MCO2, RCC_MCO2SOURCE_HSE, RCC_MCODIV_1);
@@ -199,6 +300,20 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* SDMMC2 init function */
+static void MX_SDMMC2_SD_Init(void)
+{
+
+  hsd2.Instance = SDMMC2;
+  hsd2.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
+  hsd2.Init.ClockBypass = SDMMC_CLOCK_BYPASS_DISABLE;
+  hsd2.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
+  hsd2.Init.BusWide = SDMMC_BUS_WIDE_1B;
+  hsd2.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
+  hsd2.Init.ClockDiv = 0;
+
 }
 
 /* SPI2 init function */
@@ -292,6 +407,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
   /* DMA2_Stream6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
@@ -316,9 +434,9 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
@@ -353,6 +471,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SD_sense_Pin */
+  GPIO_InitStruct.Pin = SD_sense_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SD_sense_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : RED_Pin YELLOW_Pin GREEN_Pin */
   GPIO_InitStruct.Pin = RED_Pin|YELLOW_Pin|GREEN_Pin;
