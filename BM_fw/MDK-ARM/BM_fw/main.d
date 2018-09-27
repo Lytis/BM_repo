@@ -40,3 +40,4 @@ bm_fw\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 bm_fw\main.o: ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h
 bm_fw\main.o: ../Middlewares/Third_Party/FatFs/src/diskio.h
 bm_fw\main.o: ../Inc/sd_diskio.h
+bm_fw\main.o: ../Src/storage.h

@@ -37,6 +37,9 @@
 
 /* USER CODE BEGIN 0 */
 
+#include "storage.h"
+#include "fatfs.h"
+
 
 extern SPI_HandleTypeDef hspi2;
 extern SPI_HandleTypeDef hspi3;
@@ -258,49 +261,52 @@ void DMA2_Stream6_IRQHandler(void)
 
 /* USER CODE BEGIN 1 */
 
-int16_t storageBuffer[64];
-extern int16_t receiveBuffer6[64];
-int i;
+int16_t storageBuffer[BUFFER_SIZE];
+extern int16_t receiveBuffer6[BUFFER_SIZE];
 
-int fault_counter=0;
 
+int packetCounter = 0;  //10 msec per packet
+
+UINT *dataWriten;
+extern FIL MyFile;
 
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
   // see from which spi port is comming from
   // save either to buffer or SDcard
-
-  for (i=0; i<32; i++)
+  int i;
+  for (i=0; i<BUFFER_SIZE/2; i++)
   {
     storageBuffer[i] = receiveBuffer6[i];
   }
 
-  for (i=0; i<32; i+=8)
-  {
-    if (receiveBuffer6[i] == 0xFFFF)
-      fault_counter++;
-  }
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
 }
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
-  for (i=32; i<64; i++)
-    storageBuffer[i] = receiveBuffer6[i];
+  int i;
 
-  for (i=32; i<64; i+=8)
+  for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
   {
-    if (receiveBuffer6[i] == 0xFFFF)
-      fault_counter++;
+    storageBuffer[i] = receiveBuffer6[i];
   }
-  //store to SD
-  if (fault_counter>=100)
-  {
-    HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
-    fault_counter = 0;
-  }
+
+
+  packetCounter++;
 
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+  f_write(&MyFile, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
+  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+
+  if (packetCounter >= 3000)
+  {
+    HAL_SPI_DMAPause(hspi);
+    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
+    f_close(&MyFile);
+  }
+  
 }
 
 /* USER CODE END 1 */

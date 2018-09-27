@@ -53,6 +53,7 @@
 
 /* USER CODE BEGIN Includes */
 
+#include "storage.h"
 #include "ff.h"
 
 /* USER CODE END Includes */
@@ -72,7 +73,8 @@ DMA_HandleTypeDef hdma_spi6_rx;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
-int16_t receiveBuffer6[64];
+
+int16_t receiveBuffer6[BUFFER_SIZE];
 
 /* USER CODE END PV */
 
@@ -137,16 +139,20 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
-/* 
+
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
     if (f_open(&MyFile, "STREAM1.HEX", FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
     {
       HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+    }else
+    {
+      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
     }
   }
 
- */
+  HAL_Delay(500);
+  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
 
 
   /* USER CODE END 2 */
@@ -155,55 +161,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
 
-  HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, 64);
-
+  HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, BUFFER_SIZE);
   HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
-/* 
-  uint16_t test_buffer[8192] = {0};
-  uint16_t zero_buffer[8192] = {0};
-  uint16_t count = 0;
 
-  int i;
-	UINT *data_writen;
-
-  for (i=0; i<sizeof(test_buffer)/2; i++)
-  {
-    test_buffer[i] = (uint16_t)count;
-    count++;
-  }
-	
-	HAL_Delay(500);
-
-  for (i=0; i<10000; i++)
-  {
-    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
-    if (FR_OK != f_write(&MyFile, zero_buffer, sizeof(zero_buffer), data_writen))
-    {
-      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
-    }
-    
-    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
-		HAL_Delay(1);
-  }
-
-  f_close(&MyFile);
-  HAL_Delay(1);
-  f_open(&MyFile, "STREAM1.HEX", FA_OPEN_EXISTING|FA_WRITE);
-  HAL_Delay(1);
-
-  for (i=0; i<10000; i++)
-  {
-    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
-    if (FR_OK != f_write(&MyFile, test_buffer, sizeof(test_buffer), data_writen))
-    {
-      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
-    }
-    
-    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
-		HAL_Delay(1);
-  }
-
-  f_close(&MyFile); */
 
   while (1)
   {
@@ -273,7 +233,7 @@ void SystemClock_Config(void)
   }
 
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SDMMC2|RCC_PERIPHCLK_CLK48;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 141;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 107;
   PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
   PeriphClkInitStruct.PLLSAI.PLLSAIQ = 2;
   PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV6;
