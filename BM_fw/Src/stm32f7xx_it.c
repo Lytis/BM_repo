@@ -41,16 +41,14 @@
 #include "fatfs.h"
 
 
-extern SPI_HandleTypeDef hspi2;
-extern SPI_HandleTypeDef hspi3;
-extern SPI_HandleTypeDef hspi6;
-
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_sdmmc2_tx;
 extern DMA_HandleTypeDef hdma_spi2_rx;
 extern DMA_HandleTypeDef hdma_spi3_rx;
+extern DMA_HandleTypeDef hdma_spi4_rx;
+extern DMA_HandleTypeDef hdma_spi5_rx;
 extern DMA_HandleTypeDef hdma_spi6_rx;
 
 /******************************************************************************/
@@ -239,10 +237,38 @@ void DMA2_Stream0_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
 
   /* USER CODE END DMA2_Stream0_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_sdmmc2_tx);
+  HAL_DMA_IRQHandler(&hdma_spi4_rx);
   /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
 
   /* USER CODE END DMA2_Stream0_IRQn 1 */
+}
+
+/**
+* @brief This function handles DMA2 stream3 global interrupt.
+*/
+void DMA2_Stream3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream3_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi5_rx);
+  /* USER CODE BEGIN DMA2_Stream3_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream3_IRQn 1 */
+}
+
+/**
+* @brief This function handles DMA2 stream5 global interrupt.
+*/
+void DMA2_Stream5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream5_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_sdmmc2_tx);
+  /* USER CODE BEGIN DMA2_Stream5_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream5_IRQn 1 */
 }
 
 /**
@@ -261,24 +287,44 @@ void DMA2_Stream6_IRQHandler(void)
 
 /* USER CODE BEGIN 1 */
 
-int16_t storageBuffer[BUFFER_SIZE];
+extern SPI_HandleTypeDef hspi2;
+
+int16_t storageBuffer[STORAGE_BUFFER_SIZE];
+
+
+//extern int16_t receiveBuffer5[BUFFER_SIZE];
+//extern int16_t receiveBuffer4[BUFFER_SIZE];
 extern int16_t receiveBuffer6[BUFFER_SIZE];
+//extern int16_t receiveBuffer3[BUFFER_SIZE];
+
+
+extern SPI_HandleTypeDef hspi3;
+extern SPI_HandleTypeDef hspi4;
+extern SPI_HandleTypeDef hspi5;
+extern SPI_HandleTypeDef hspi6;
+
+int flag5 = 2,flag4 = 2, flag6 = 2, flag3 = 2;
 
 
 int packetCounter = 0;  //10 msec per packet
 
 UINT *dataWriten;
-extern FIL MyFile;
+extern FIL File;
 
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
-  // see from which spi port is comming from
-  // save either to buffer or SDcard
+
   int i;
+
+  /* for (i=0; i<BUFFER_SIZE/2; i++)
+    storageBuffer[i] = receiveBuffer5[i]; */
+  /* for (i=0; i<BUFFER_SIZE/2; i++)
+    storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i]; */
   for (i=0; i<BUFFER_SIZE/2; i++)
-  {
-    storageBuffer[i] = receiveBuffer6[i];
-  }
+    storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+  /* for (i=0; i<BUFFER_SIZE/2; i++)
+    storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i]; */
+
 
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
 }
@@ -287,24 +333,33 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
 
+  
+  /* for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    storageBuffer1[i] = receiveBuffer5[i]; */
+  /* for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    storageBuffer2[i+BUFFER_SIZE] = receiveBuffer4[i]; */
   for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
-  {
-    storageBuffer[i] = receiveBuffer6[i];
-  }
+    storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+  /* for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    storageBuffer4[i+3*BUFFER_SIZE] = receiveBuffer3[i]; */
 
 
   packetCounter++;
 
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+
+
   HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
-  f_write(&MyFile, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
+  f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
   HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+
+
 
   if (packetCounter >= 3000)
   {
     HAL_SPI_DMAPause(hspi);
     HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
-    f_close(&MyFile);
+    f_close(&File);
   }
   
 }

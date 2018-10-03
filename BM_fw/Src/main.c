@@ -65,16 +65,22 @@ DMA_HandleTypeDef hdma_sdmmc2_tx;
 
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
+SPI_HandleTypeDef hspi4;
+SPI_HandleTypeDef hspi5;
 SPI_HandleTypeDef hspi6;
 DMA_HandleTypeDef hdma_spi2_rx;
 DMA_HandleTypeDef hdma_spi3_rx;
+DMA_HandleTypeDef hdma_spi4_rx;
+DMA_HandleTypeDef hdma_spi5_rx;
 DMA_HandleTypeDef hdma_spi6_rx;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
-
+int16_t receiveBuffer5[BUFFER_SIZE];
+int16_t receiveBuffer4[BUFFER_SIZE];
 int16_t receiveBuffer6[BUFFER_SIZE];
+int16_t receiveBuffer3[BUFFER_SIZE];
 
 /* USER CODE END PV */
 
@@ -86,6 +92,8 @@ static void MX_SPI3_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_SPI6_Init(void);
 static void MX_SDMMC2_SD_Init(void);
+static void MX_SPI5_Init(void);
+static void MX_SPI4_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -95,7 +103,7 @@ static void MX_SDMMC2_SD_Init(void);
 /* USER CODE BEGIN 0 */
 
 FATFS mynewdiskFatFs;
-FIL MyFile;
+FIL File;
 char mynewdiskPath[4];
 
 
@@ -136,13 +144,15 @@ int main(void)
   MX_SPI6_Init();
   MX_SDMMC2_SD_Init();
   MX_FATFS_Init();
+  MX_SPI5_Init();
+  MX_SPI4_Init();
   /* USER CODE BEGIN 2 */
 
 
 
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
-    if (f_open(&MyFile, "STREAM1.HEX", FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
+    if (f_open(&File, "DATA.HEX", FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
     {
       HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
     }else
@@ -150,7 +160,7 @@ int main(void)
       HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
     }
   }
-
+  
   HAL_Delay(500);
   HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
 
@@ -160,8 +170,21 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
+  int i;
+  for (i=0;i<BUFFER_SIZE; i++)
+  {
+    receiveBuffer5[i] = 0;
+    receiveBuffer4[i] = 0;
+    receiveBuffer6[i] = 0;
+    receiveBuffer3[i] = 0;
+  }
 
+
+  //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer5, BUFFER_SIZE);
+  //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer4, BUFFER_SIZE);
   HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, BUFFER_SIZE);
+  //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer3, BUFFER_SIZE);
+
   HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
 
 
@@ -326,6 +349,56 @@ static void MX_SPI3_Init(void)
 
 }
 
+/* SPI4 init function */
+static void MX_SPI4_Init(void)
+{
+
+  /* SPI4 parameter configuration*/
+  hspi4.Instance = SPI4;
+  hspi4.Init.Mode = SPI_MODE_SLAVE;
+  hspi4.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
+  hspi4.Init.DataSize = SPI_DATASIZE_16BIT;
+  hspi4.Init.CLKPolarity = SPI_POLARITY_HIGH;
+  hspi4.Init.CLKPhase = SPI_PHASE_2EDGE;
+  hspi4.Init.NSS = SPI_NSS_SOFT;
+  hspi4.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi4.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi4.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi4.Init.CRCPolynomial = 7;
+  hspi4.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi4.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+  if (HAL_SPI_Init(&hspi4) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
+/* SPI5 init function */
+static void MX_SPI5_Init(void)
+{
+
+  /* SPI5 parameter configuration*/
+  hspi5.Instance = SPI5;
+  hspi5.Init.Mode = SPI_MODE_SLAVE;
+  hspi5.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
+  hspi5.Init.DataSize = SPI_DATASIZE_16BIT;
+  hspi5.Init.CLKPolarity = SPI_POLARITY_HIGH;
+  hspi5.Init.CLKPhase = SPI_PHASE_2EDGE;
+  hspi5.Init.NSS = SPI_NSS_SOFT;
+  hspi5.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi5.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi5.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi5.Init.CRCPolynomial = 7;
+  hspi5.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi5.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+  if (HAL_SPI_Init(&hspi5) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
 /* SPI6 init function */
 static void MX_SPI6_Init(void)
 {
@@ -357,8 +430,8 @@ static void MX_SPI6_Init(void)
 static void MX_DMA_Init(void) 
 {
   /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
   __HAL_RCC_DMA2_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
   /* DMA1_Stream0_IRQn interrupt configuration */
@@ -370,6 +443,12 @@ static void MX_DMA_Init(void)
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+  /* DMA2_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+  /* DMA2_Stream5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
   /* DMA2_Stream6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
