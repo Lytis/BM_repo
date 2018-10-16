@@ -292,10 +292,10 @@ extern SPI_HandleTypeDef hspi2;
 int16_t storageBuffer[STORAGE_BUFFER_SIZE];
 
 
-//extern int16_t receiveBuffer5[BUFFER_SIZE];
-//extern int16_t receiveBuffer4[BUFFER_SIZE];
+extern int16_t receiveBuffer5[BUFFER_SIZE];
+extern int16_t receiveBuffer4[BUFFER_SIZE];
 extern int16_t receiveBuffer6[BUFFER_SIZE];
-//extern int16_t receiveBuffer3[BUFFER_SIZE];
+extern int16_t receiveBuffer3[BUFFER_SIZE];
 
 
 extern SPI_HandleTypeDef hspi3;
@@ -315,17 +315,17 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
 
   int i;
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
 
-  /* for (i=0; i<BUFFER_SIZE/2; i++)
-    storageBuffer[i] = receiveBuffer5[i]; */
-  /* for (i=0; i<BUFFER_SIZE/2; i++)
-    storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i]; */
   for (i=0; i<BUFFER_SIZE/2; i++)
+  {
+    storageBuffer[i] = receiveBuffer5[i];
+    storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
     storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-  /* for (i=0; i<BUFFER_SIZE/2; i++)
-    storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i]; */
+    storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+  }
 
-
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
 }
 
@@ -333,16 +333,17 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
 
-  
-  /* for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
-    storageBuffer1[i] = receiveBuffer5[i]; */
-  /* for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
-    storageBuffer2[i+BUFFER_SIZE] = receiveBuffer4[i]; */
-  for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
-    storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-  /* for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
-    storageBuffer4[i+3*BUFFER_SIZE] = receiveBuffer3[i]; */
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
 
+  for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+  {
+    storageBuffer[i] = receiveBuffer5[i];
+    storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+    storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+    storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+  }
+
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
 
   packetCounter++;
 
@@ -355,7 +356,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 
 
 
-  if (packetCounter >= 3000)
+  if (packetCounter >= 500)
   {
     HAL_SPI_DMAPause(hspi);
     HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);

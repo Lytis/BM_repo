@@ -3,7 +3,7 @@
 <title>Static Call Graph - [BM_fw\BM_fw.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image BM_fw\BM_fw.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Oct 04 01:09:55 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Tue Oct 16 21:30:18 2018
 <BR><P>
 <H3>Maximum Stack Usage =        328 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -935,8 +935,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[c2]"></a>HAL_SPI_RxCpltCallback</STRONG> (Thumb, 130 bytes, Stack size 16 bytes, stm32f7xx_it.o(i.HAL_SPI_RxCpltCallback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = HAL_SPI_RxCpltCallback &rArr; f_write &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write
+<P><STRONG><a name="[c2]"></a>HAL_SPI_RxCpltCallback</STRONG> (Thumb, 194 bytes, Stack size 32 bytes, stm32f7xx_it.o(i.HAL_SPI_RxCpltCallback))
+<BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = HAL_SPI_RxCpltCallback &rArr; f_write &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_write
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_close
@@ -946,8 +946,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_DMAReceiveCplt
 </UL>
 
-<P><STRONG><a name="[c7]"></a>HAL_SPI_RxHalfCpltCallback</STRONG> (Thumb, 46 bytes, Stack size 8 bytes, stm32f7xx_it.o(i.HAL_SPI_RxHalfCpltCallback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = HAL_SPI_RxHalfCpltCallback
+<P><STRONG><a name="[c7]"></a>HAL_SPI_RxHalfCpltCallback</STRONG> (Thumb, 114 bytes, Stack size 32 bytes, stm32f7xx_it.o(i.HAL_SPI_RxHalfCpltCallback))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = HAL_SPI_RxHalfCpltCallback
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
@@ -1654,7 +1654,7 @@ Local Symbols
 <LI> stm32f7xx_hal_spi.o(i.HAL_SPI_TransmitReceive_DMA)
 </UL>
 <P><STRONG><a name="[79]"></a>SPI_DMAHalfReceiveCplt</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, stm32f7xx_hal_spi.o(i.SPI_DMAHalfReceiveCplt))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SPI_DMAHalfReceiveCplt &rArr; HAL_SPI_RxHalfCpltCallback
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = SPI_DMAHalfReceiveCplt &rArr; HAL_SPI_RxHalfCpltCallback
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_RxHalfCpltCallback
 </UL>
@@ -1669,7 +1669,7 @@ Local Symbols
 <BR>[Address Reference Count : 1]<UL><LI> stm32f7xx_hal_spi.o(i.HAL_SPI_TransmitReceive_DMA)
 </UL>
 <P><STRONG><a name="[7a]"></a>SPI_DMAReceiveCplt</STRONG> (Thumb, 86 bytes, Stack size 16 bytes, stm32f7xx_hal_spi.o(i.SPI_DMAReceiveCplt))
-<BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = SPI_DMAReceiveCplt &rArr; HAL_SPI_RxCpltCallback &rArr; f_write &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = SPI_DMAReceiveCplt &rArr; HAL_SPI_RxCpltCallback &rArr; f_write &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_RxCpltCallback
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback

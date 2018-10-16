@@ -2,7 +2,7 @@
 #define STORAGE_H
 
 
-#define BUFFER_SIZE 7680
+#define BUFFER_SIZE 9600        //7680
 #define STORAGE_BUFFER_SIZE BUFFER_SIZE*4
 
 //every packet has 7680 samples from 8 mics. 

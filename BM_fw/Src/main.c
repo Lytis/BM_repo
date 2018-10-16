@@ -171,14 +171,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   int i;
-  for (i=0;i<BUFFER_SIZE; i++)
-  {
-    receiveBuffer5[i] = 0;
-    receiveBuffer4[i] = 0;
-    receiveBuffer6[i] = 0;
-    receiveBuffer3[i] = 0;
-  }
 
+  for (i=0; i<BUFFER_SIZE; i++)
+  {
+    receiveBuffer5[i] = i;
+    receiveBuffer4[i] = i;
+    receiveBuffer6[i] = i;
+    receiveBuffer3[i] = i;
+  }
 
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer5, BUFFER_SIZE);
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer4, BUFFER_SIZE);
