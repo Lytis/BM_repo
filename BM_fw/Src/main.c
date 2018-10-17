@@ -50,9 +50,11 @@
 #include "main.h"
 #include "stm32f7xx_hal.h"
 #include "fatfs.h"
+#include "usb_device.h"
 
 /* USER CODE BEGIN Includes */
 
+#include "usb_device.h"
 #include "storage.h"
 #include "ff.h"
 
@@ -81,6 +83,8 @@ int16_t receiveBuffer5[BUFFER_SIZE];
 int16_t receiveBuffer4[BUFFER_SIZE];
 int16_t receiveBuffer6[BUFFER_SIZE];
 int16_t receiveBuffer3[BUFFER_SIZE];
+
+int locked = 1;
 
 /* USER CODE END PV */
 
@@ -146,7 +150,18 @@ int main(void)
   MX_FATFS_Init();
   MX_SPI5_Init();
   MX_SPI4_Init();
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+
+  while (1)
+  {
+    if (locked == 0)
+      break;
+    HAL_Delay(50);
+  }
+
+  char msg1[] = "starting\n\r";
+  CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1));
 
 
 
@@ -225,8 +240,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 6;
-  RCC_OscInitStruct.PLL.PLLN = 210;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 281;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -256,10 +271,10 @@ void SystemClock_Config(void)
   }
 
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SDMMC2|RCC_PERIPHCLK_CLK48;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 107;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 125;
   PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
   PeriphClkInitStruct.PLLSAI.PLLSAIQ = 2;
-  PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV6;
+  PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV4;
   PeriphClkInitStruct.PLLSAIDivQ = 1;
   PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
   PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48SOURCE_PLLSAIP;
@@ -295,7 +310,7 @@ static void MX_SDMMC2_SD_Init(void)
   hsd2.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
   hsd2.Init.BusWide = SDMMC_BUS_WIDE_1B;
   hsd2.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd2.Init.ClockDiv = 0;
+  hsd2.Init.ClockDiv = 2;
 
 }
 

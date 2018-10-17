@@ -31,6 +31,9 @@ bm_fw\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h
 bm_fw\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_sd.h
 bm_fw\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_sdmmc.h
 bm_fw\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_spi.h
+bm_fw\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h
+bm_fw\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h
+bm_fw\main.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
 bm_fw\main.o: ../Inc/fatfs.h
 bm_fw\main.o: ../Middlewares/Third_Party/FatFs/src/ff.h
 bm_fw\main.o: ../Middlewares/Third_Party/FatFs/src/integer.h
@@ -40,4 +43,8 @@ bm_fw\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 bm_fw\main.o: ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h
 bm_fw\main.o: ../Middlewares/Third_Party/FatFs/src/diskio.h
 bm_fw\main.o: ../Inc/sd_diskio.h
+bm_fw\main.o: ../Inc/usb_device.h
+bm_fw\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
+bm_fw\main.o: ../Inc/usbd_conf.h
+bm_fw\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 bm_fw\main.o: ../Src/storage.h

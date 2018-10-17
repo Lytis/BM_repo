@@ -35,6 +35,9 @@ bm_fw\fatfs.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h
 bm_fw\fatfs.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_sd.h
 bm_fw\fatfs.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_sdmmc.h
 bm_fw\fatfs.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_spi.h
+bm_fw\fatfs.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h
+bm_fw\fatfs.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h
+bm_fw\fatfs.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
 bm_fw\fatfs.o: ../Inc/bsp_driver_sd.h
 bm_fw\fatfs.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 bm_fw\fatfs.o: ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h
