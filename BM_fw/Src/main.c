@@ -153,7 +153,7 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
-  while (1)
+/*   while (1)
   {
     if (locked == 0)
       break;
@@ -161,7 +161,7 @@ int main(void)
   }
 
   char msg1[] = "starting\n\r";
-  CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1));
+  CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1)); */
 
 
 
@@ -189,10 +189,10 @@ int main(void)
 
   for (i=0; i<BUFFER_SIZE; i++)
   {
-    receiveBuffer5[i] = i;
-    receiveBuffer4[i] = i;
-    receiveBuffer6[i] = i;
-    receiveBuffer3[i] = i;
+    receiveBuffer5[i] = 0;
+    receiveBuffer4[i] = 0;
+    receiveBuffer6[i] = 0;
+    receiveBuffer3[i] = 0;
   }
 
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer5, BUFFER_SIZE);

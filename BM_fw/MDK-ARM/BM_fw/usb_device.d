@@ -44,5 +44,5 @@ bm_fw\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ior
 bm_fw\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
 bm_fw\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
 bm_fw\usb_device.o: ../Inc/usbd_desc.h
-bm_fw\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h
-bm_fw\usb_device.o: ../Inc/usbd_cdc_if.h
+bm_fw\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc/usbd_audio.h
+bm_fw\usb_device.o: ../Inc/usbd_audio_if.h
