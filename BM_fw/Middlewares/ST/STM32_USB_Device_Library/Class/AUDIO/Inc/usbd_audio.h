@@ -48,7 +48,8 @@
   * @{
   */ 
 #define AUDIO_OUT_EP                                  0x01
-#define USB_AUDIO_CONFIG_DESC_SIZ                     109
+#define AUDIO_IN_EP                                   0x81
+#define USB_AUDIO_CONFIG_DESC_SIZ                     100
 #define AUDIO_INTERFACE_DESC_SIZE                     9
 #define USB_AUDIO_DESC_SIZ                            0x09
 #define AUDIO_STANDARD_ENDPOINT_DESC_SIZE             0x09
@@ -90,6 +91,7 @@
 
 
 #define AUDIO_OUT_PACKET                              (uint32_t)(((USBD_AUDIO_FREQ * 2 * 2) /1000)) 
+#define AUDIO_IN_PACKET                               (uint32_t)(((USBD_AUDIO_IN_FREQ * 2 * 1) /1000))
 #define AUDIO_DEFAULT_VOLUME                          70
     
 /* Number of sub-packets in the audio transfer buffer. You can modify this value but always make sure

@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "ff.h": "c"
+        "ff.h": "c",
+        "usbd_core.h": "c",
+        "usb_device.h": "c"
     }
 }

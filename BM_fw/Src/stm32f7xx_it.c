@@ -39,6 +39,7 @@
 
 #include "storage.h"
 #include "fatfs.h"
+#include "usbd_audio.h"
 
 
 /* USER CODE END 0 */
@@ -51,6 +52,7 @@ extern DMA_HandleTypeDef hdma_spi3_rx;
 extern DMA_HandleTypeDef hdma_spi4_rx;
 extern DMA_HandleTypeDef hdma_spi5_rx;
 extern DMA_HandleTypeDef hdma_spi6_rx;
+extern TIM_HandleTypeDef htim14;
 
 /******************************************************************************/
 /*            Cortex-M7 Processor Interruption and Exception Handlers         */ 
@@ -228,6 +230,33 @@ void DMA1_Stream1_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
 
   /* USER CODE END DMA1_Stream1_IRQn 1 */
+}
+
+static int16_t Sbuf[24];
+extern USBD_HandleTypeDef hUsbDeviceFS;
+
+/**
+* @brief This function handles TIM8 trigger and commutation interrupts and TIM14 global interrupt.
+*/
+void TIM8_TRG_COM_TIM14_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 0 */
+
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim14);
+  /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
+
+  int i;
+  static int16_t upup = 0;
+  for (i=0;i<=24;i++)
+  {
+    Sbuf[i] = upup;
+    
+  }
+  upup++;
+  USBD_LL_Transmit(&hUsbDeviceFS,AUDIO_OUT_EP, (uint8_t*)Sbuf, 48);
+
+  /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
 }
 
 /**

@@ -76,6 +76,8 @@ DMA_HandleTypeDef hdma_spi4_rx;
 DMA_HandleTypeDef hdma_spi5_rx;
 DMA_HandleTypeDef hdma_spi6_rx;
 
+TIM_HandleTypeDef htim14;
+
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -98,6 +100,7 @@ static void MX_SPI6_Init(void);
 static void MX_SDMMC2_SD_Init(void);
 static void MX_SPI5_Init(void);
 static void MX_SPI4_Init(void);
+static void MX_TIM14_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -151,6 +154,7 @@ int main(void)
   MX_SPI5_Init();
   MX_SPI4_Init();
   MX_USB_DEVICE_Init();
+  MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 
 /*   while (1)
@@ -163,7 +167,7 @@ int main(void)
   char msg1[] = "starting\n\r";
   CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1)); */
 
-
+/* 
 
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
@@ -175,7 +179,7 @@ int main(void)
       HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
     }
   }
-  
+   */
   HAL_Delay(500);
   HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
 
@@ -195,6 +199,8 @@ int main(void)
     receiveBuffer3[i] = 0;
   }
 
+  HAL_TIM_Base_Start_IT(&htim14);
+/* 
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer5, BUFFER_SIZE);
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer4, BUFFER_SIZE);
   HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, BUFFER_SIZE);
@@ -202,7 +208,7 @@ int main(void)
 
   HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
 
-
+ */
   while (1)
   {
 		
@@ -433,6 +439,23 @@ static void MX_SPI6_Init(void)
   hspi6.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
   hspi6.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
   if (HAL_SPI_Init(&hspi6) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
+/* TIM14 init function */
+static void MX_TIM14_Init(void)
+{
+
+  htim14.Instance = TIM14;
+  htim14.Init.Prescaler = 1000;
+  htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim14.Init.Period = 107;
+  htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }

@@ -31,6 +31,8 @@ bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ha
 bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_sd.h
 bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_sdmmc.h
 bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_spi.h
+bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h
+bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h
 bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h
 bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h
 bm_fw\stm32f7xx_hal_flash_ex.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
