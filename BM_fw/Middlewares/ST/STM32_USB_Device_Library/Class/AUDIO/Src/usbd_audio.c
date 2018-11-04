@@ -362,7 +362,7 @@ static uint8_t  USBD_AUDIO_Init (USBD_HandleTypeDef *pdev,
   else
   {
     haudio = (USBD_AUDIO_HandleTypeDef*) pdev->pClassData;
-    haudio->alt_setting = 1;
+    haudio->alt_setting = 0;
     haudio->offset = AUDIO_OFFSET_UNKNOWN;
     haudio->wr_ptr = 0; 
     haudio->rd_ptr = 0;  
@@ -471,6 +471,9 @@ static uint8_t  USBD_AUDIO_Setup (USBD_HandleTypeDef *pdev,
       if ((uint8_t)(req->wValue) <= USBD_MAX_NUM_INTERFACES)
       {
         haudio->alt_setting = (uint8_t)(req->wValue);
+        //send the first packet to initialize transmition
+        int16_t ChokeBuffer[24] = {0};
+        USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)ChokeBuffer, 48);
       }
       else
       {
@@ -512,7 +515,18 @@ static uint8_t  USBD_AUDIO_DataIn (USBD_HandleTypeDef *pdev,
                               uint8_t epnum)
 {
   /* Only OUT data are processed */
-  USBD_LL_FlushEP(pdev, AUDIO_IN_EP);
+  //USBD_LL_FlushEP(pdev, AUDIO_IN_EP);
+  int i;
+
+  static int16_t Sbuf[24];
+  static int16_t upup = 0;
+  for (i=0;i<=24;i++)
+  {
+    Sbuf[i] = upup;
+    
+  }
+  upup++;
+  USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)Sbuf, 48);
 
   return USBD_OK;
 }
@@ -560,6 +574,17 @@ static uint8_t  USBD_AUDIO_EP0_TxReady (USBD_HandleTypeDef *pdev)
   */
 static uint8_t  USBD_AUDIO_SOF (USBD_HandleTypeDef *pdev)
 {
+
+  USBD_AUDIO_HandleTypeDef   *haudio;
+  haudio = (USBD_AUDIO_HandleTypeDef*) pdev->pClassData;
+  
+  if (haudio->alt_setting == 1)
+  {
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+  }else
+  {
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+  }
   return USBD_OK;
 }
 

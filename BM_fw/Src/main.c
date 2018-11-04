@@ -167,7 +167,7 @@ int main(void)
   char msg1[] = "starting\n\r";
   CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1)); */
 
-/* 
+
 
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
@@ -179,7 +179,7 @@ int main(void)
       HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
     }
   }
-   */
+  
   HAL_Delay(500);
   HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
 
@@ -199,16 +199,17 @@ int main(void)
     receiveBuffer3[i] = 0;
   }
 
-  HAL_TIM_Base_Start_IT(&htim14);
-/* 
+
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer5, BUFFER_SIZE);
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer4, BUFFER_SIZE);
   HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, BUFFER_SIZE);
   //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer3, BUFFER_SIZE);
 
+  
+
   HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
 
- */
+
   while (1)
   {
 		

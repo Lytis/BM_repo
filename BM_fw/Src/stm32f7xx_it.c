@@ -232,9 +232,6 @@ void DMA1_Stream1_IRQHandler(void)
   /* USER CODE END DMA1_Stream1_IRQn 1 */
 }
 
-static int16_t Sbuf[24];
-extern USBD_HandleTypeDef hUsbDeviceFS;
-
 /**
 * @brief This function handles TIM8 trigger and commutation interrupts and TIM14 global interrupt.
 */
@@ -246,15 +243,6 @@ void TIM8_TRG_COM_TIM14_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim14);
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
 
-  int i;
-  static int16_t upup = 0;
-  for (i=0;i<=24;i++)
-  {
-    Sbuf[i] = upup;
-    
-  }
-  upup++;
-  USBD_LL_Transmit(&hUsbDeviceFS,AUDIO_OUT_EP, (uint8_t*)Sbuf, 48);
 
   /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
 }
@@ -322,6 +310,7 @@ void DMA2_Stream6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream6_IRQn 0 */
 
+  HAL_GPIO_TogglePin(GREEN_GPIO_Port, GREEN_Pin);
   /* USER CODE END DMA2_Stream6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_spi6_rx);
   /* USER CODE BEGIN DMA2_Stream6_IRQn 1 */
@@ -369,15 +358,15 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
   }
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
+  //HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
+  //HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
 }
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
 
   for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
   {
@@ -387,11 +376,11 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
     storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
   }
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
+  //HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
 
   packetCounter++;
 
-  HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+  //HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
 
 
   HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
