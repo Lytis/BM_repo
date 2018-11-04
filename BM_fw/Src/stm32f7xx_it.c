@@ -42,6 +42,35 @@
 #include "usbd_audio.h"
 
 
+
+extern SPI_HandleTypeDef hspi2;
+extern USBD_HandleTypeDef hUsbDeviceFS;
+
+
+int16_t storageBuffer[STORAGE_BUFFER_SIZE];
+
+
+extern int16_t receiveBuffer5[BUFFER_SIZE];
+extern int16_t receiveBuffer4[BUFFER_SIZE];
+extern int16_t receiveBuffer6[BUFFER_SIZE];
+extern int16_t receiveBuffer3[BUFFER_SIZE];
+
+
+extern SPI_HandleTypeDef hspi3;
+extern SPI_HandleTypeDef hspi4;
+extern SPI_HandleTypeDef hspi5;
+extern SPI_HandleTypeDef hspi6;
+
+int flag5 = EMPTY,flag4 = EMPTY, flag6 = EMPTY, flag3 = EMPTY;
+
+
+int packetCounter = 0;  //10 msec per packet
+
+
+UINT *dataWriten;
+extern FIL File;
+
+
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -310,7 +339,6 @@ void DMA2_Stream6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream6_IRQn 0 */
 
-  HAL_GPIO_TogglePin(GREEN_GPIO_Port, GREEN_Pin);
   /* USER CODE END DMA2_Stream6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_spi6_rx);
   /* USER CODE BEGIN DMA2_Stream6_IRQn 1 */
@@ -320,74 +348,105 @@ void DMA2_Stream6_IRQHandler(void)
 
 /* USER CODE BEGIN 1 */
 
-extern SPI_HandleTypeDef hspi2;
 
-int16_t storageBuffer[STORAGE_BUFFER_SIZE];
-
-
-extern int16_t receiveBuffer5[BUFFER_SIZE];
-extern int16_t receiveBuffer4[BUFFER_SIZE];
-extern int16_t receiveBuffer6[BUFFER_SIZE];
-extern int16_t receiveBuffer3[BUFFER_SIZE];
-
-
-extern SPI_HandleTypeDef hspi3;
-extern SPI_HandleTypeDef hspi4;
-extern SPI_HandleTypeDef hspi5;
-extern SPI_HandleTypeDef hspi6;
-
-int flag5 = 2,flag4 = 2, flag6 = 2, flag3 = 2;
-
-
-int packetCounter = 0;  //10 msec per packet
-
-UINT *dataWriten;
-extern FIL File;
 
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
 
   int i;
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
 
-  for (i=0; i<BUFFER_SIZE/2; i++)
+  if (hspi->Instance == SPI3)
   {
-    storageBuffer[i] = receiveBuffer5[i];
-    storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
-    storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-    storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+    for (i=0; i<BUFFER_SIZE/2; i++)
+    {
+      storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+    }
+    flag3 = HALF;
   }
+  if (hspi->Instance == SPI4)
+  {
+    for (i=0; i<BUFFER_SIZE/2; i++)
+    {
+      storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+    }
+    flag4 = HALF;
+  }
+  if (hspi->Instance == SPI5)
+  {
+    for (i=0; i<BUFFER_SIZE/2; i++)
+    {
+      storageBuffer[i] = receiveBuffer5[i];
+    }
+    flag5 = HALF;
+  }
+  if (hspi->Instance == SPI6)
+  {
+    for (i=0; i<BUFFER_SIZE/2; i++)
+    {
+      storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];        
+    }
+    flag6 = HALF;
+  }
+  
 
-  //HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
-  //HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
 }
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
-
-  for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+  if (hspi->Instance == SPI3)
   {
-    storageBuffer[i] = receiveBuffer5[i];
-    storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
-    storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-    storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+    }
+    flag3 = FULL;
+  }
+  if (hspi->Instance == SPI4)
+  {
+    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+    }
+    flag4 = FULL;
+  }
+  if (hspi->Instance == SPI5)
+  {
+    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i] = receiveBuffer5[i];
+    }
+    flag5 = FULL;
+  }
+  if (hspi->Instance == SPI6)
+  {
+    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+    }
+    flag6 = FULL;
   }
 
-  //HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
 
   packetCounter++;
 
-  //HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
 
+  if (((flag3==FULL)||(flag3==EMPTY))&&
+      ((flag4==FULL)||(flag4==EMPTY))&&
+      ((flag5==FULL)||(flag5==EMPTY))&&
+      ((flag6==FULL)||(flag6==EMPTY)))
+  {
+    f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
+    flag3 = EMPTY;
+    flag4 = EMPTY;
+    flag5 = EMPTY;
+    flag6 = EMPTY;
+  }
 
-  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
-  f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
-  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
-
-
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
+  
 
   if (packetCounter >= 500)
   {

@@ -200,10 +200,10 @@ int main(void)
   }
 
 
-  //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer5, BUFFER_SIZE);
-  //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer4, BUFFER_SIZE);
+  HAL_SPI_Receive_DMA(&hspi5, (uint8_t*)receiveBuffer5, BUFFER_SIZE);
+  HAL_SPI_Receive_DMA(&hspi4, (uint8_t*)receiveBuffer4, BUFFER_SIZE);
   HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, BUFFER_SIZE);
-  //HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer3, BUFFER_SIZE);
+  HAL_SPI_Receive_DMA(&hspi3, (uint8_t*)receiveBuffer3, BUFFER_SIZE);
 
   
 
@@ -471,6 +471,8 @@ static void MX_DMA_Init(void)
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
   __HAL_RCC_DMA1_CLK_ENABLE();
+
+ 
 
   /* DMA interrupt init */
   /* DMA1_Stream0_IRQn interrupt configuration */
