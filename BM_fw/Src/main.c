@@ -54,6 +54,7 @@
 
 /* USER CODE BEGIN Includes */
 
+#include "fifo.h"
 #include "usb_device.h"
 #include "storage.h"
 #include "ff.h"

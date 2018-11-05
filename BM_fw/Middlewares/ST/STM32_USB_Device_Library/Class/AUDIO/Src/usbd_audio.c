@@ -70,6 +70,7 @@
 #include "usbd_desc.h"
 #include "usbd_ctlreq.h"
 
+#include "fifo.h"
 
 /** @addtogroup STM32_USB_DEVICE_LIBRARY
   * @{
@@ -516,17 +517,12 @@ static uint8_t  USBD_AUDIO_DataIn (USBD_HandleTypeDef *pdev,
 {
   /* Only OUT data are processed */
   //USBD_LL_FlushEP(pdev, AUDIO_IN_EP);
-  int i;
 
-  static int16_t Sbuf[24];
-  static int16_t upup = 0;
-  for (i=0;i<=24;i++)
-  {
-    Sbuf[i] = upup;
-    
-  }
-  upup++;
-  USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)Sbuf, 48);
+
+
+  USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)get_packet(), packet_samples());
+ 
+  
 
   return USBD_OK;
 }

@@ -1,9 +1,13 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
+#include "stm32f7xx_hal.h"
+#include "main.h"
 
 #define BUFFER_SIZE 9600        //7680
 #define STORAGE_BUFFER_SIZE BUFFER_SIZE*4
+
+
 
 #define HALF            2
 #define FULL            1

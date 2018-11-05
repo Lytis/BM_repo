@@ -49,4 +49,5 @@ bm_fw\main.o: ../Inc/usb_device.h
 bm_fw\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
 bm_fw\main.o: ../Inc/usbd_conf.h
 bm_fw\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+bm_fw\main.o: ../Src/fifo.h
 bm_fw\main.o: ../Src/storage.h

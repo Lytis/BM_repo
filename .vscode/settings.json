@@ -4,6 +4,7 @@
         "usbd_core.h": "c",
         "usb_device.h": "c",
         "stm32f7xx_hal.h": "c",
-        "storage.h": "c"
+        "storage.h": "c",
+        "main.h": "c"
     }
 }

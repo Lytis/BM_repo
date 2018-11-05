@@ -37,6 +37,7 @@ bm_fw\stm32f7xx_it.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h
 bm_fw\stm32f7xx_it.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h
 bm_fw\stm32f7xx_it.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
 bm_fw\stm32f7xx_it.o: ../Inc/stm32f7xx_it.h
+bm_fw\stm32f7xx_it.o: ../Src/fifo.h
 bm_fw\stm32f7xx_it.o: ../Src/storage.h
 bm_fw\stm32f7xx_it.o: ../Inc/fatfs.h
 bm_fw\stm32f7xx_it.o: ../Middlewares/Third_Party/FatFs/src/ff.h

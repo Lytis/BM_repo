@@ -10,6 +10,7 @@
 "bm_fw\usbd_audio_if.o"
 "bm_fw\stm32f7xx_it.o"
 "bm_fw\stm32f7xx_hal_msp.o"
+"bm_fw\fifo.o"
 "bm_fw\stm32f7xx_hal_pcd.o"
 "bm_fw\stm32f7xx_hal_pcd_ex.o"
 "bm_fw\stm32f7xx_ll_usb.o"
@@ -41,6 +42,6 @@
 "bm_fw\usbd_ioreq.o"
 "bm_fw\usbd_audio.o"
 --library_type=microlib --strict --scatter "BM_fw\BM_fw.sct"
---summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "BM_fw.map" -o BM_fw\BM_fw.axf

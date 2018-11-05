@@ -37,6 +37,7 @@
 
 /* USER CODE BEGIN 0 */
 
+#include "fifo.h"
 #include "storage.h"
 #include "fatfs.h"
 #include "usbd_audio.h"
@@ -352,7 +353,6 @@ void DMA2_Stream6_IRQHandler(void)
 
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
-
   int i;
 
   if (hspi->Instance == SPI3)
@@ -383,7 +383,11 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
   {
     for (i=0; i<BUFFER_SIZE/2; i++)
     {
-      storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];        
+      storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      if (i%8 == 0)
+      {
+        put_sample(receiveBuffer6[i]);
+      }
     }
     flag6 = HALF;
   }
@@ -424,6 +428,10 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      if (i%8 == 0)
+      {
+        put_sample(receiveBuffer6[i]);
+      }
     }
     flag6 = FULL;
   }
