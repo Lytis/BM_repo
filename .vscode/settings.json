@@ -5,6 +5,8 @@
         "usb_device.h": "c",
         "stm32f7xx_hal.h": "c",
         "storage.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "usbd_audio.h": "c",
+        "fifo.h": "c"
     }
 }

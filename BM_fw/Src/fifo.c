@@ -43,8 +43,8 @@ uint8_t* get_packet()
     if (fifo->rd_ptr != fifo->wr_ptr)
     {
         tempPtr = (uint8_t *)&fifo->buffer[fifo->rd_ptr];
-        packet_rd += 2;
-        packet_rd %= (AUDIO_TOTAL_BUF_SIZE - 1);
+        fifo->rd_ptr += 2;
+        fifo->rd_ptr %= (AUDIO_TOTAL_BUF_SIZE - 1);
     }else
     {
         tempPtr = (uint8_t *)zero_pad;
