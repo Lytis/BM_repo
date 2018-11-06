@@ -11,7 +11,7 @@
 
 void put_sample(int16_t sample);
 uint8_t* get_packet(void);
-int packet_samples(void);
+void fifo_init(void);
 
 
 #endif

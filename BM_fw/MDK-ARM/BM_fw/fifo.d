@@ -37,3 +37,12 @@ bm_fw\fifo.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h
 bm_fw\fifo.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h
 bm_fw\fifo.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h
 bm_fw\fifo.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
+bm_fw\fifo.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc/usbd_audio.h
+bm_fw\fifo.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+bm_fw\fifo.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
+bm_fw\fifo.o: ../Inc/usbd_conf.h
+bm_fw\fifo.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+bm_fw\fifo.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+bm_fw\fifo.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
+bm_fw\fifo.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+bm_fw\fifo.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
