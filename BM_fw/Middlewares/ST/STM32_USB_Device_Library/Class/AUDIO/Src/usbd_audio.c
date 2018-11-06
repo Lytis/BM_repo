@@ -520,7 +520,7 @@ static uint8_t  USBD_AUDIO_DataIn (USBD_HandleTypeDef *pdev,
 
 
 
-  USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)get_packet(), AUDIO_OUT_PACKET);
+  USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)get_packet(), USB_PACKET_SAMPLES*2);
  
   return USBD_OK;
 }

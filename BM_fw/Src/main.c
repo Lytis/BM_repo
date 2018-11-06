@@ -168,7 +168,6 @@ int main(void)
   char msg1[] = "starting\n\r";
   CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1)); */
 
-  fifo_init();
 
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {

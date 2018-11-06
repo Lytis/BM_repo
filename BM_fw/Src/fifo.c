@@ -1,35 +1,37 @@
 #include "fifo.h"
 #include "usbd_audio.h"
 
-int16_t USB_fifo[USB_FIFO_PACKETS][USB_PACKET_SAMPLES];
-int16_t zero_pad[USB_PACKET_SAMPLES];
+int16_t USB_fifo[FIFO_QUEUES][SUB_PACKETS][USB_PACKET_SAMPLES] = {0};
+int16_t zero_pad[USB_PACKET_SAMPLES] = {0};
 
-int packet_wr = 0, packet_rd = 0, sample_wr = 0, sample_rd = 0;
+static int packet_wr = 0, packet_rd = 0, sample_wr = 0;
 
-extern USBD_HandleTypeDef hUsbDeviceFS;
+static int fifo_no = 0;
+static int stored_queues = 0;
+static int stored_packets[FIFO_QUEUES] = {0};
+static int pt = 0;
 
-static USBD_AUDIO_HandleTypeDef    *fifo;
 
-void fifo_init(void)
-{
-    fifo = (USBD_AUDIO_HandleTypeDef*)hUsbDeviceFS.pClassData;
-}
-
-void put_sample(int16_t sample)
+void put_samples(int16_t* rx_buffer)
 {
 
-    fifo->buffer[fifo->wr_ptr] = (uint8_t)(sample >>8);
-    fifo->wr_ptr ++;
-    fifo->wr_ptr %= (AUDIO_TOTAL_BUF_SIZE - 1);
-    fifo->buffer[fifo->wr_ptr] = (uint8_t)(sample);
-    fifo->wr_ptr ++;
-    fifo->wr_ptr %= (AUDIO_TOTAL_BUF_SIZE - 1);
+    int i, k, s = 0;
 
-    if (fifo->wr_ptr == fifo->rd_ptr)
+    for (i=0;i<=199;i++)
     {
-        fifo->rd_ptr += 2;
-        fifo->rd_ptr %= (AUDIO_TOTAL_BUF_SIZE - 1);
+        for (k=0;k<=23;k++)
+        {
+            USB_fifo[fifo_no][i][k] = rx_buffer[s];
+            s++;
+        }
+        
     }
+    stored_packets[fifo_no]++;
+
+    stored_queues++;
+    stored_queues %= FIFO_QUEUES-1;
+    fifo_no ++;
+    fifo_no %= FIFO_QUEUES-1;
 
 }
 
@@ -40,15 +42,21 @@ uint8_t* get_packet()
 {
     uint8_t* tempPtr = NULL;
 
-    if (fifo->rd_ptr != fifo->wr_ptr)
+/*     if (packet_wr != packet_rd)
     {
-        tempPtr = (uint8_t *)&fifo->buffer[fifo->rd_ptr];
-        fifo->rd_ptr += 2;
-        fifo->rd_ptr %= (AUDIO_TOTAL_BUF_SIZE - 1);
+        tempPtr = (uint8_t *)USB_fifo[packet_rd];
+        packet_rd ++;
+        if (packet_rd == USB_FIFO_PACKETS)
+            packet_rd = 0;
     }else
     {
         tempPtr = (uint8_t *)zero_pad;
-    }
+    } */
+
+
+    tempPtr = (uint8_t *)USB_fifo[1][pt];
+    pt ++;
+    pt %= SUB_PACKETS;
 
     return tempPtr;
 }
