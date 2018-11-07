@@ -13,8 +13,10 @@
 
 #define MIC                 0
 
+#define FIFO_SIZE           4800*2
 
-void put_samples(int16_t* rx_buffer);
+
+void put_samples(int16_t sample);
 uint8_t* get_packet(void);
 void fifo_init(void);
 

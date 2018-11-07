@@ -384,12 +384,13 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     for (i=0; i<BUFFER_SIZE/2; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      if (i%8 == 0)
+      {
+        put_samples(receiveBuffer6[i]);
+      }
     }
     flag6 = HALF;
   }
-
-
-  put_samples(receiveBuffer6);
   
 
 }
@@ -427,6 +428,10 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      if (i%8 == 0)
+      {
+        put_samples(receiveBuffer6[i]);
+      }
     }
     flag6 = FULL;
   }
@@ -450,11 +455,10 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 
   HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
   
-  put_samples(&receiveBuffer6[BUFFER_SIZE/2]);
 
   if (packetCounter >= 500)
   {
-    HAL_SPI_DMAPause(hspi);
+    //HAL_SPI_DMAPause(hspi);
     HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
     f_close(&File);
   }
