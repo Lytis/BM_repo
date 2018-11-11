@@ -111,9 +111,10 @@ static void MX_TIM14_Init(void);
 /* USER CODE BEGIN 0 */
 
 FATFS mynewdiskFatFs;
-FIL File;
+FIL File, logFile;
 char mynewdiskPath[4];
-
+char dataFileName[] = "data_##.hex";
+char logFileName[] = "datafiles.log";
 
 /* USER CODE END 0 */
 
@@ -168,10 +169,34 @@ int main(void)
   char msg1[] = "starting\n\r";
   CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1)); */
 
+  int file_no = 0;
 
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
-    if (f_open(&File, "DATA.HEX", FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
+
+    //here search for log file
+    //open log or create new
+    //read last data_#.hex
+    //open new data_#.hex
+    //write to log the new file
+    //
+
+    if (f_open(&logFile, logFileName, FA_OPEN_EXISTING|FA_WRITE) == FR_OK)
+    {
+
+    }else
+    {
+      if (f_open(&logFile, logFileName, FA_CREATE_NEW|FA_WRITE) == FR_OK)
+      {
+        //go to the end and take the number
+      }
+    }
+
+    f_close(&logFile);
+
+    sprintf(dataFileName, "data_%2d.hex", file_no);
+
+    if (f_open(&File, dataFileName, FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
     {
       HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
     }else

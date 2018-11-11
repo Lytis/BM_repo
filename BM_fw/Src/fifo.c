@@ -1,31 +1,43 @@
 #include "fifo.h"
 #include "usbd_audio.h"
 
-int rd = 0, wr = 0;
-int samples = 0;
+#include <math.h>
+#include <stdio.h>
 
-int16_t USB_fifo[FIFO_SIZE];
-int pack = 0, ptr = 0;
+int Prd = 0, Swr = 0, Pwr = 0;
 
-int16_t zeroPad[24] = {0};
+int16_t USB_fifo[FIFO_SIZE][FIFO_PACKET_SIZE];
 
+
+double t = 0, dt = 4.16e-5, w = 2512, ramp = 0, dramp = 1e-4;
 
 
 void put_samples(int16_t sample)
 {
-    /* 
-    USBD_AUDIO_HandleTypeDef   *haudio;
-    haudio = (USBD_AUDIO_HandleTypeDef*) hUsbDeviceFS->pClassData; */
-
-    USB_fifo[wr] = sample;
-    wr ++;
-    wr %= FIFO_SIZE-1;
-    samples ++;
-    if (samples == FIFO_SIZE+1)
+    
+    /* t += dt;
+    ramp +=dramp;
+    if (ramp >= 1)
     {
-        samples = FIFO_SIZE;
-        rd ++;
-        rd %= FIFO_SIZE-1;
+        ramp = 0;
+    }
+    double S = ramp*32767*sin(w*t);
+    sample = (int16_t)S; */
+    USB_fifo [Pwr][Swr] = sample;
+
+    Swr++;
+    if (Swr == FIFO_PACKET_SIZE)
+    {
+        Swr = 0;
+        Pwr++;
+        if(Pwr == FIFO_SIZE)
+        {
+            Pwr = 0;
+        }
+        if (Pwr == Prd)
+        {
+            Prd +=1;
+        }
     }
 
 }
@@ -35,19 +47,11 @@ void put_samples(int16_t sample)
 
 uint8_t* get_packet()
 {
-    uint8_t* tempPtr = NULL;
+    static uint8_t* tempPtr = NULL;
 
-
-    if (samples >=24)
-    {
-        tempPtr = (uint8_t*)&USB_fifo[rd];
-        rd += 24;
-        samples -=24;
-        rd %= FIFO_SIZE-1;
-    }else
-    {
-        tempPtr = (uint8_t*)&zeroPad[0];
-    }
+    tempPtr = (uint8_t*)USB_fifo[(Prd + 60)%(FIFO_SIZE-1)];
+    Prd++;
+    Prd %= FIFO_SIZE;
 
     return tempPtr;
 }

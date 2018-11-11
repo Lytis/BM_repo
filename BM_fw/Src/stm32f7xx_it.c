@@ -354,6 +354,7 @@ void DMA2_Stream6_IRQHandler(void)
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
+  int s = 0;
 
   if (hspi->Instance == SPI3)
   {
@@ -384,9 +385,11 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     for (i=0; i<BUFFER_SIZE/2; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-      if (i%8 == 0)
+      s++;
+      if (s%8 == 0)
       {
-        put_samples(receiveBuffer6[i]);
+        s=0;
+        put_samples(receiveBuffer6[i-5]);
       }
     }
     flag6 = HALF;
@@ -398,6 +401,7 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
+  int s = 0;
 
   if (hspi->Instance == SPI3)
   {
@@ -428,9 +432,11 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-      if (i%8 == 0)
+      s++;
+      if (s%8 == 0)
       {
-        put_samples(receiveBuffer6[i]);
+        s=0;
+        put_samples(receiveBuffer6[i-5]);
       }
     }
     flag6 = FULL;

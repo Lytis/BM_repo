@@ -13,7 +13,8 @@
 
 #define MIC                 0
 
-#define FIFO_SIZE           4800*2
+#define FIFO_PACKET_SIZE    24
+#define FIFO_SIZE           200
 
 
 void put_samples(int16_t sample);

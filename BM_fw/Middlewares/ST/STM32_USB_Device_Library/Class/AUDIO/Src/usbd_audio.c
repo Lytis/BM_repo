@@ -513,29 +513,14 @@ static uint8_t  *USBD_AUDIO_GetCfgDesc (uint16_t *length)
   * @retval status
   */
 
- extern int16_t USB_fifo[FIFO_SIZE];
- extern int rd, samples;
 static uint8_t  USBD_AUDIO_DataIn (USBD_HandleTypeDef *pdev, 
                               uint8_t epnum)
 {
   /* Only OUT data are processed */
+
   USBD_LL_FlushEP(pdev, AUDIO_IN_EP);
+  USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)get_packet(), 48);
 
-  uint8_t *tempPtr;
-
-  if (samples >=24)
-  {
-      tempPtr = (uint8_t*)&USB_fifo[rd];
-      rd += 24;
-      samples -=24;
-      rd %= FIFO_SIZE-1;
-      USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)tempPtr, 48);
-  }
-
-
-
-  //USBD_LL_Transmit(pdev,AUDIO_OUT_EP, (uint8_t*)get_packet(), 48);
- 
   return USBD_OK;
 }
 
@@ -585,7 +570,6 @@ static uint8_t  USBD_AUDIO_SOF (USBD_HandleTypeDef *pdev)
 
   USBD_AUDIO_HandleTypeDef   *haudio;
   haudio = (USBD_AUDIO_HandleTypeDef*) pdev->pClassData;
-  
   if (haudio->alt_setting == 1)
   {
     HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
