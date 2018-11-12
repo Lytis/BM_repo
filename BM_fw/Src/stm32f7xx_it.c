@@ -62,7 +62,7 @@ extern SPI_HandleTypeDef hspi4;
 extern SPI_HandleTypeDef hspi5;
 extern SPI_HandleTypeDef hspi6;
 
-int flag5 = EMPTY,flag4 = EMPTY, flag6 = EMPTY, flag3 = EMPTY;
+int flag5 = NOT_STARTED,flag4 = NOT_STARTED, flag6 = NOT_STARTED, flag3 = NOT_STARTED;
 
 
 int packetCounter = 0;  //10 msec per packet
@@ -363,7 +363,7 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     {
       storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
     }
-    flag3 = HALF;
+    flag3 = HALF_READY;
   }
   if (hspi->Instance == SPI4)
   {
@@ -371,7 +371,7 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     {
       storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
     }
-    flag4 = HALF;
+    flag4 = HALF_READY;
   }
   if (hspi->Instance == SPI5)
   {
@@ -379,7 +379,7 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     {
       storageBuffer[i] = receiveBuffer5[i];
     }
-    flag5 = HALF;
+    flag5 = HALF_READY;
   }
   if (hspi->Instance == SPI6)
   {
@@ -387,8 +387,22 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
     }
-    flag6 = HALF;
+    flag6 = HALF_READY;
   }
+
+/*   if (((flag3==HALF_READY)||(flag3==NOT_STARTED))&&
+    ((flag4==HALF_READY)||(flag4==NOT_STARTED))&&
+    ((flag5==HALF_READY)||(flag5==NOT_STARTED))&&
+    ((flag6==HALF_READY)||(flag6==NOT_STARTED)))
+  {
+      for (i=0; i<BUFFER_SIZE/2; i++)
+      {
+        storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+        storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+        storageBuffer[i] = receiveBuffer5[i];
+        storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      }
+  } */
 
   
   fifo_put(receiveBuffer6, 2);
@@ -403,35 +417,35 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 
   if (hspi->Instance == SPI3)
   {
-    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
-    }
-    flag3 = FULL;
+    } */
+    flag3 = FULL_READY;
   }
   if (hspi->Instance == SPI4)
   {
-    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
-    }
-    flag4 = FULL;
+    } */
+    flag4 = FULL_READY;
   }
   if (hspi->Instance == SPI5)
   {
-    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i] = receiveBuffer5[i];
-    }
-    flag5 = FULL;
+    } */
+    flag5 = FULL_READY;
   }
   if (hspi->Instance == SPI6)
   {
-    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-    }
-    flag6 = FULL;
+    } */
+    flag6 = FULL_READY;
   }
 
 
@@ -439,16 +453,23 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 
   HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
 
-  if (((flag3==FULL)||(flag3==EMPTY))&&
-      ((flag4==FULL)||(flag4==EMPTY))&&
-      ((flag5==FULL)||(flag5==EMPTY))&&
-      ((flag6==FULL)||(flag6==EMPTY)))
+  if (((flag3==FULL_READY)||(flag3==NOT_STARTED))&&
+      ((flag4==FULL_READY)||(flag4==NOT_STARTED))&&
+      ((flag5==FULL_READY)||(flag5==NOT_STARTED))&&
+      ((flag6==FULL_READY)||(flag6==NOT_STARTED)))
   {
+    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+      storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+      storageBuffer[i] = receiveBuffer5[i];
+      storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+    }
     f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
-    flag3 = EMPTY;
-    flag4 = EMPTY;
-    flag5 = EMPTY;
-    flag6 = EMPTY;
+    flag3 = NOT_STARTED;
+    flag4 = NOT_STARTED;
+    flag5 = NOT_STARTED;
+    flag6 = NOT_STARTED;
   }
 
   HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);

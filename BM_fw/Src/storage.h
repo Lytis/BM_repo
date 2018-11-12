@@ -12,6 +12,9 @@
 #define HALF            2
 #define FULL            1
 #define EMPTY           0
+#define NOT_STARTED     3
+#define FULL_READY      4
+#define HALF_READY      5
 
 //every packet has 7680 samples from 8 mics. 
 // So there are 7680/8 = 960 samples per mic per packet
