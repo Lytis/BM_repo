@@ -418,6 +418,10 @@ static uint8_t  USBD_AUDIO_DeInit (USBD_HandleTypeDef *pdev,
   * @param  req: usb requests
   * @retval status
   */
+
+ extern int USB_fifo_use;
+
+
 static uint8_t  USBD_AUDIO_Setup (USBD_HandleTypeDef *pdev, 
                                 USBD_SetupReqTypedef *req)
 {
@@ -573,10 +577,11 @@ static uint8_t  USBD_AUDIO_SOF (USBD_HandleTypeDef *pdev)
   if (haudio->alt_setting == 1)
   {
     HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
-
+    USB_fifo_use = 1;
   }else
   {
     HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+    USB_fifo_use = 0;
   }
   return USBD_OK;
 }

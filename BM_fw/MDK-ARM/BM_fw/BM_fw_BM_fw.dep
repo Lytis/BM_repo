@@ -1,6 +1,6 @@
 Dependencies for Project 'BM_fw', Target 'BM_fw': (DO NOT MODIFY !)
 F (startup_stm32f767xx.s)(0x5BDEC6B7)(--cpu Cortex-M7.fp.dp --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "STM32F767xx SETA 1"--list startup_stm32f767xx.lst --xref -o bm_fw\startup_stm32f767xx.o --depend bm_fw\startup_stm32f767xx.d)
-F (../Src/main.c)(0x5BE8A648)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\main.o --omf_browse bm_fw\main.crf --depend bm_fw\main.d)
+F (../Src/main.c)(0x5BE958EF)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\main.o --omf_browse bm_fw\main.crf --depend bm_fw\main.d)
 I (../Inc/main.h)(0x5BDEC6B4)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x5B26353C)
 I (../Inc/stm32f7xx_hal_conf.h)(0x5BDEC6B4)
@@ -50,8 +50,8 @@ I (../Inc/usb_device.h)(0x5BDEC6B2)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h)(0x5B263542)
 I (../Inc/usbd_conf.h)(0x5BDD68EC)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BD7A4)
-I (../Src/fifo.h)(0x5BE882DE)
-I (../Src/storage.h)(0x5BE202A4)
+I (../Src/fifo.h)(0x5BE954DB)
+I (../Src/storage.h)(0x5BE95CE6)
 F (../Src/bsp_driver_sd.c)(0x5BDEC6B1)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\bsp_driver_sd.o --omf_browse bm_fw\bsp_driver_sd.crf --depend bm_fw\bsp_driver_sd.d)
 I (../Inc/bsp_driver_sd.h)(0x5BDEC6B1)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x5B26353C)
@@ -364,7 +364,7 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h)(0x5B26353D)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h)(0x5B26353D)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h)(0x5B263542)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h)(0x5B263542)
-F (../Src/stm32f7xx_it.c)(0x5BE89AF8)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\stm32f7xx_it.o --omf_browse bm_fw\stm32f7xx_it.crf --depend bm_fw\stm32f7xx_it.d)
+F (../Src/stm32f7xx_it.c)(0x5BE951FE)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\stm32f7xx_it.o --omf_browse bm_fw\stm32f7xx_it.crf --depend bm_fw\stm32f7xx_it.d)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x5B26353C)
 I (../Inc/stm32f7xx_hal_conf.h)(0x5BDEC6B4)
 I (../Inc/main.h)(0x5BDEC6B4)
@@ -402,8 +402,8 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h)(0x5B26353D)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h)(0x5B26353D)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h)(0x5B26353D)
 I (../Inc/stm32f7xx_it.h)(0x5BDEC6B3)
-I (../Src/fifo.h)(0x5BE882DE)
-I (../Src/storage.h)(0x5BE202A4)
+I (../Src/fifo.h)(0x5BE954DB)
+I (../Src/storage.h)(0x5BE95CE6)
 I (../Inc/fatfs.h)(0x5BDEC6B2)
 I (../Middlewares/Third_Party/FatFs/src/ff.h)(0x5B263549)
 I (../Middlewares/Third_Party/FatFs/src/integer.h)(0x5B263549)
@@ -457,8 +457,8 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h)(0x5B26353D)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h)(0x5B26353D)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h)(0x5B26353D)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h)(0x5B26353D)
-F (..\Src\fifo.c)(0x5BE89860)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\fifo.o --omf_browse bm_fw\fifo.crf --depend bm_fw\fifo.d)
-I (..\Src\fifo.h)(0x5BE882DE)
+F (..\Src\fifo.c)(0x5BE95C43)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\fifo.o --omf_browse bm_fw\fifo.crf --depend bm_fw\fifo.d)
+I (..\Src\fifo.h)(0x5BE954DB)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x5B26353C)
 I (../Inc/stm32f7xx_hal_conf.h)(0x5BDEC6B4)
 I (../Inc/main.h)(0x5BDEC6B4)
@@ -503,6 +503,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588BD7A4)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BD7A4)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h)(0x5B263542)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h)(0x5B263542)
+I (..\Src\storage.h)(0x5BE95CE6)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588BD7A4)
 F (../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c)(0x5B263542)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\stm32f7xx_hal_pcd.o --omf_browse bm_fw\stm32f7xx_hal_pcd.crf --depend bm_fw\stm32f7xx_hal_pcd.d)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h)(0x5B26353C)
@@ -1624,7 +1625,7 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h)(0x5B26353D)
 I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h)(0x5B26353D)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h)(0x5B263542)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h)(0x5B263542)
-F (../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Src/usbd_audio.c)(0x5BE8975C)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\usbd_audio.o --omf_browse bm_fw\usbd_audio.crf --depend bm_fw\usbd_audio.d)
+F (../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Src/usbd_audio.c)(0x5BE94C31)(--c99 -c --cpu Cortex-M7.fp.dp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc -I ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc-I.\RTE\_BM_fw-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F767xx -DUSE_HAL_DRIVER -DSTM32F767xx-o bm_fw\usbd_audio.o --omf_browse bm_fw\usbd_audio.crf --depend bm_fw\usbd_audio.d)
 I (../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc/usbd_audio.h)(0x5BE2140B)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h)(0x5B263542)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h)(0x5B263542)
@@ -1670,4 +1671,4 @@ I (../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h)(0x5B26353D)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h)(0x5B263542)
 I (../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h)(0x5B263542)
 I (../Inc/usbd_desc.h)(0x5BDEC6B2)
-I (..\Src\fifo.h)(0x5BE882DE)
+I (..\Src\fifo.h)(0x5BE954DB)

@@ -112,9 +112,11 @@ static void MX_TIM14_Init(void);
 
 FATFS mynewdiskFatFs;
 FIL File, logFile;
+UINT *dataWr;
 char mynewdiskPath[4];
-char dataFileName[] = "data_##.hex";
+char dataFileName[] = "data_00.hex";
 char logFileName[] = "datafiles.log";
+char logMsg[] = "log:data_00.hex\n\r";
 
 /* USER CODE END 0 */
 
@@ -170,6 +172,7 @@ int main(void)
   CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1)); */
 
   int file_no = 0;
+  int file_size = 0, logs = 0;
 
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
@@ -181,20 +184,24 @@ int main(void)
     //write to log the new file
     //
 
-    if (f_open(&logFile, logFileName, FA_OPEN_EXISTING|FA_WRITE) == FR_OK)
+    if (f_open(&logFile, logFileName, FA_OPEN_ALWAYS|FA_WRITE) == FR_OK)
     {
-
+      HAL_Delay(50);
+      file_size = f_size(&logFile);
+      f_write(&logFile, &logMsg[0], sizeof(logMsg),dataWr);
+      if (file_size != 0)
+      {
+        logs = file_size / sizeof(logMsg);
+      }
     }else
     {
-      if (f_open(&logFile, logFileName, FA_CREATE_NEW|FA_WRITE) == FR_OK)
-      {
-        //go to the end and take the number
-      }
+
     }
+    HAL_Delay(50);
 
     f_close(&logFile);
 
-    sprintf(dataFileName, "data_%2d.hex", file_no);
+    sprintf(dataFileName, "data_%.2d.hex", file_no);
 
     if (f_open(&File, dataFileName, FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
     {

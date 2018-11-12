@@ -354,7 +354,8 @@ void DMA2_Stream6_IRQHandler(void)
 void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
-  int s = 0;
+
+  
 
   if (hspi->Instance == SPI3)
   {
@@ -385,23 +386,20 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     for (i=0; i<BUFFER_SIZE/2; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-      s++;
-      if (s%8 == 0)
-      {
-        s=0;
-        put_samples(receiveBuffer6[i-5]);
-      }
     }
     flag6 = HALF;
   }
+
   
+  fifo_put(receiveBuffer6, 2);
 
 }
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
-  int s = 0;
+
+  
 
   if (hspi->Instance == SPI3)
   {
@@ -432,12 +430,6 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
-      s++;
-      if (s%8 == 0)
-      {
-        s=0;
-        put_samples(receiveBuffer6[i-5]);
-      }
     }
     flag6 = FULL;
   }
@@ -468,6 +460,8 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
     HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
     f_close(&File);
   }
+
+  fifo_put(&receiveBuffer6[BUFFER_SIZE/2], 2);
   
 }
 
