@@ -54,6 +54,7 @@
 
 /* USER CODE BEGIN Includes */
 
+#include "fileSystem.h"
 #include "fifo.h"
 #include "usb_device.h"
 #include "storage.h"
@@ -110,13 +111,6 @@ static void MX_TIM14_Init(void);
 
 /* USER CODE BEGIN 0 */
 
-FATFS mynewdiskFatFs;
-FIL File, logFile;
-UINT *dataWr;
-char mynewdiskPath[4];
-char dataFileName[] = "data_00.hex";
-char logFileName[] = "datafiles.log";
-char logMsg[] = "log:data_00.hex\n\r";
 
 /* USER CODE END 0 */
 
@@ -161,60 +155,9 @@ int main(void)
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 
-/*   while (1)
-  {
-    if (locked == 0)
-      break;
-    HAL_Delay(50);
-  }
 
-  char msg1[] = "starting\n\r";
-  CDC_Transmit_FS((uint8_t*)msg1, sizeof(msg1)); */
-
-  int file_no = 0;
-  int file_size = 0, logs = 0;
-
-  if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
-  {
-
-    //here search for log file
-    //open log or create new
-    //read last data_#.hex
-    //open new data_#.hex
-    //write to log the new file
-    //
-
-    if (f_open(&logFile, logFileName, FA_OPEN_ALWAYS|FA_WRITE) == FR_OK)
-    {
-      HAL_Delay(50);
-      file_size = f_size(&logFile);
-      f_write(&logFile, &logMsg[0], sizeof(logMsg),dataWr);
-      if (file_size != 0)
-      {
-        logs = file_size / sizeof(logMsg);
-      }
-    }else
-    {
-
-    }
-    HAL_Delay(50);
-
-    f_close(&logFile);
-
-    sprintf(dataFileName, "data_%.2d.hex", file_no);
-
-    if (f_open(&File, dataFileName, FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
-    {
-      HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
-    }else
-    {
-      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
-    }
-  }
-  
-  HAL_Delay(500);
-  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
-
+  init_file_system();
+  start_new_session();
 
   /* USER CODE END 2 */
 
@@ -244,8 +187,6 @@ int main(void)
 
   while (1)
   {
-		
-		//HAL_GPIO_TogglePin(YELLOW_GPIO_Port, YELLOW_Pin);
 
   /* USER CODE END WHILE */
 

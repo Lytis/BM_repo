@@ -445,6 +445,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\fifo.c</FilePath>
             </File>
+            <File>
+              <FileName>fileSystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\fileSystem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

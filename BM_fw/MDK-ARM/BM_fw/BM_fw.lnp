@@ -11,6 +11,7 @@
 "bm_fw\stm32f7xx_it.o"
 "bm_fw\stm32f7xx_hal_msp.o"
 "bm_fw\fifo.o"
+"bm_fw\filesystem.o"
 "bm_fw\stm32f7xx_hal_pcd.o"
 "bm_fw\stm32f7xx_hal_pcd_ex.o"
 "bm_fw\stm32f7xx_ll_usb.o"
