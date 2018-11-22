@@ -67,12 +67,10 @@
 SD_HandleTypeDef hsd2;
 DMA_HandleTypeDef hdma_sdmmc2_tx;
 
-SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
 SPI_HandleTypeDef hspi4;
 SPI_HandleTypeDef hspi5;
 SPI_HandleTypeDef hspi6;
-DMA_HandleTypeDef hdma_spi2_rx;
 DMA_HandleTypeDef hdma_spi3_rx;
 DMA_HandleTypeDef hdma_spi4_rx;
 DMA_HandleTypeDef hdma_spi5_rx;
@@ -97,12 +95,12 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_SPI3_Init(void);
-static void MX_SPI2_Init(void);
 static void MX_SPI6_Init(void);
 static void MX_SDMMC2_SD_Init(void);
 static void MX_SPI5_Init(void);
 static void MX_SPI4_Init(void);
 static void MX_TIM14_Init(void);
+static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -145,7 +143,6 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_SPI3_Init();
-  MX_SPI2_Init();
   MX_SPI6_Init();
   MX_SDMMC2_SD_Init();
   MX_FATFS_Init();
@@ -153,6 +150,9 @@ int main(void)
   MX_SPI4_Init();
   MX_USB_DEVICE_Init();
   MX_TIM14_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -280,6 +280,17 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* EXTI15_10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+}
+
 /* SDMMC2 init function */
 static void MX_SDMMC2_SD_Init(void)
 {
@@ -291,31 +302,6 @@ static void MX_SDMMC2_SD_Init(void)
   hsd2.Init.BusWide = SDMMC_BUS_WIDE_1B;
   hsd2.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
   hsd2.Init.ClockDiv = 2;
-
-}
-
-/* SPI2 init function */
-static void MX_SPI2_Init(void)
-{
-
-  /* SPI2 parameter configuration*/
-  hspi2.Instance = SPI2;
-  hspi2.Init.Mode = SPI_MODE_SLAVE;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
-  hspi2.Init.DataSize = SPI_DATASIZE_16BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
-  hspi2.Init.CLKPhase = SPI_PHASE_2EDGE;
-  hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi2.Init.CRCPolynomial = 7;
-  hspi2.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
-  hspi2.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
 
 }
 
@@ -445,15 +431,10 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA2_CLK_ENABLE();
   __HAL_RCC_DMA1_CLK_ENABLE();
 
- 
-
   /* DMA interrupt init */
   /* DMA1_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
-  /* DMA1_Stream1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
@@ -530,6 +511,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(SD_sense_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : REC_BUTTON_Pin BUTTON_1_Pin */
+  GPIO_InitStruct.Pin = REC_BUTTON_Pin|BUTTON_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : RED_Pin YELLOW_Pin GREEN_Pin */
   GPIO_InitStruct.Pin = RED_Pin|YELLOW_Pin|GREEN_Pin;

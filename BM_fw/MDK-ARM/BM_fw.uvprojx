@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F767xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;          ../Drivers/STM32F7xx_HAL_Driver/Inc;          ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy;          ../Drivers/CMSIS/Device/ST/STM32F7xx/Include;          ../Drivers/CMSIS/Include;          ../Middlewares/Third_Party/FatFs/src;          ..\Src;      ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;   ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc</IncludePath>
+              <IncludePath>../Inc;           ../Drivers/STM32F7xx_HAL_Driver/Inc;           ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy;           ../Drivers/CMSIS/Device/ST/STM32F7xx/Include;           ../Drivers/CMSIS/Include;           ../Middlewares/Third_Party/FatFs/src;           ..\Src;       ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;    ../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -391,6 +391,16 @@
           <GroupName>Application/User</GroupName>
           <Files>
             <File>
+              <FileName>fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>fileSystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\fileSystem.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/main.c</FilePath>
@@ -439,16 +449,6 @@
               <FileName>stm32f7xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f7xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\fifo.c</FilePath>
-            </File>
-            <File>
-              <FileName>fileSystem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\fileSystem.c</FilePath>
             </File>
           </Files>
         </Group>

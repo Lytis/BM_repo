@@ -67,6 +67,7 @@ int flag5 = NOT_STARTED,flag4 = NOT_STARTED, flag6 = NOT_STARTED, flag3 = NOT_ST
 
 int packetCounter = 0;  //10 msec per packet
 
+int rec_on = 1;
 
 UINT *dataWriten;
 extern FIL File;
@@ -77,7 +78,6 @@ extern FIL File;
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern DMA_HandleTypeDef hdma_sdmmc2_tx;
-extern DMA_HandleTypeDef hdma_spi2_rx;
 extern DMA_HandleTypeDef hdma_spi3_rx;
 extern DMA_HandleTypeDef hdma_spi4_rx;
 extern DMA_HandleTypeDef hdma_spi5_rx;
@@ -249,17 +249,34 @@ void DMA1_Stream0_IRQHandler(void)
 }
 
 /**
-* @brief This function handles DMA1 stream1 global interrupt.
+* @brief This function handles EXTI line[15:10] interrupts.
 */
-void DMA1_Stream1_IRQHandler(void)
+void EXTI15_10_IRQHandler(void)
 {
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
 
-  /* USER CODE END DMA1_Stream1_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_spi2_rx);
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+  HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
+  if (rec_on == 1)
+  {
+    rec_on = 0;
+    close_session();
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+  }else
+  {
+    
+    rec_on = 1;
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+    //start_new_session();
+  }
 
-  /* USER CODE END DMA1_Stream1_IRQn 1 */
+  /* USER CODE END EXTI15_10_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
+  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+  /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
 /**
@@ -420,36 +437,41 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 
   packetCounter++;
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+  
 
   if (((flag3==FULL_READY)||(flag3==NOT_STARTED))&&
       ((flag4==FULL_READY)||(flag4==NOT_STARTED))&&
       ((flag5==FULL_READY)||(flag5==NOT_STARTED))&&
       ((flag6==FULL_READY)||(flag6==NOT_STARTED)))
   {
-    for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    if (rec_on == 1)
     {
-      storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
-      storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
-      storageBuffer[i] = receiveBuffer5[i];
-      storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+      for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+      {
+        storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+        storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+        storageBuffer[i] = receiveBuffer5[i];
+        storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      }
+      f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
+      flag3 = NOT_STARTED;
+      flag4 = NOT_STARTED;
+      flag5 = NOT_STARTED;
+      flag6 = NOT_STARTED;
+      HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
     }
-    f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
-    flag3 = NOT_STARTED;
-    flag4 = NOT_STARTED;
-    flag5 = NOT_STARTED;
-    flag6 = NOT_STARTED;
   }
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
+  
   
 
-  if (packetCounter >= 500)
+/*   if (packetCounter >= 500)
   {
     //HAL_SPI_DMAPause(hspi);
     HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
     close_session();
-  }
+  } */
 
   fifo_put(&receiveBuffer6[BUFFER_SIZE/2], 2);
   

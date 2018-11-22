@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/User/Documents/BM_repo/BM_fw/Inc
+HeaderPath=C:/Users/User/Documents/BM_fw/BM_fw/Inc
 HeaderFiles=stm32f7xx_it.h;stm32f7xx_hal_conf.h;main.h;ffconf.h;bsp_driver_sd.h;sd_diskio.h;fatfs.h;fatfs_platform.h;usb_device.h;usbd_conf.h;usbd_desc.h;usbd_cdc_if.h;usbd_audio_if.h;
-SourcePath=C:/Users/User/Documents/BM_repo/BM_fw/Src
+SourcePath=C:/Users/User/Documents/BM_fw/BM_fw/Src
 SourceFiles=stm32f7xx_it.c;stm32f7xx_hal_msp.c;main.c;bsp_driver_sd.c;sd_diskio.c;fatfs.c;fatfs_platform.c;usb_device.c;usbd_conf.c;usbd_desc.c;usbd_cdc_if.c;usbd_audio_if.c;
 
 [PreviousLibFiles]

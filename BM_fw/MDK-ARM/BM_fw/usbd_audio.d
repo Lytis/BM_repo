@@ -46,4 +46,3 @@ bm_fw\usbd_audio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_cor
 bm_fw\usbd_audio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 bm_fw\usbd_audio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
 bm_fw\usbd_audio.o: ../Inc/usbd_desc.h
-bm_fw\usbd_audio.o: ..\Src\fifo.h

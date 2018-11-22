@@ -28,10 +28,6 @@ int file_size = 0, logs = 0;
 void init_file_system()
 {
 
-    
-  int file_no = 0;
-  int file_size = 0, logs = 0;
-
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
     file_no = 0;
