@@ -41,7 +41,7 @@
 #include "storage.h"
 #include "fatfs.h"
 #include "usbd_audio.h"
-#include "fileSystem.h"
+
 
 
 extern SPI_HandleTypeDef hspi2;
@@ -407,6 +407,21 @@ void HAL_SPI_RxHalfCpltCallback(SPI_HandleTypeDef * hspi)
     flag6 = HALF_READY;
   }
 
+/*   if (((flag3==HALF_READY)||(flag3==NOT_STARTED))&&
+    ((flag4==HALF_READY)||(flag4==NOT_STARTED))&&
+    ((flag5==HALF_READY)||(flag5==NOT_STARTED))&&
+    ((flag6==HALF_READY)||(flag6==NOT_STARTED)))
+  {
+      for (i=0; i<BUFFER_SIZE/2; i++)
+      {
+        storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+        storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+        storageBuffer[i] = receiveBuffer5[i];
+        storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+      }
+  } */
+
+  
   fifo_put(receiveBuffer6, 2);
 
 }
@@ -419,18 +434,34 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 
   if (hspi->Instance == SPI3)
   {
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
+    } */
     flag3 = FULL_READY;
   }
   if (hspi->Instance == SPI4)
   {
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i+BUFFER_SIZE] = receiveBuffer4[i];
+    } */
     flag4 = FULL_READY;
   }
   if (hspi->Instance == SPI5)
   {
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i] = receiveBuffer5[i];
+    } */
     flag5 = FULL_READY;
   }
   if (hspi->Instance == SPI6)
   {
+/*     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
+    {
+      storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
+    } */
     flag6 = FULL_READY;
   }
 
@@ -470,8 +501,13 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
   {
     //HAL_SPI_DMAPause(hspi);
     HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
+<<<<<<< HEAD
     close_session();
   } */
+=======
+    f_close(&File);
+  }
+>>>>>>> parent of 4250c54... log_added
 
   fifo_put(&receiveBuffer6[BUFFER_SIZE/2], 2);
   

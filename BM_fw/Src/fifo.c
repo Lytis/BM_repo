@@ -7,7 +7,6 @@
 int Prd = 0, Swr = 0, Pwr = 0;
 
 int16_t USB_fifo[FIFO_SIZE][FIFO_PACKET_SIZE];
-int16_t zero_pad[FIFO_PACKET_SIZE];
 
 int USB_fifo_use = 0;
 double t = 0, dt = 4.16e-5, w = 2512, ramp = 0, dramp = 1e-4;
@@ -53,15 +52,11 @@ uint8_t* get_packet()
 {
     static uint8_t* tempPtr = NULL;
 
-    if (Prd != Pwr)
-    {
-        tempPtr = (uint8_t*)USB_fifo[(Prd)%(FIFO_SIZE-1)];
-        Prd++;
-        Prd %= FIFO_SIZE;
-    }else
-    {
-        tempPtr = (uint8_t*)zero_pad;
-    }
+    
+
+    tempPtr = (uint8_t*)USB_fifo[(Prd + FIFO_SIZE - 60)%(FIFO_SIZE-1)];
+    Prd++;
+    Prd %= FIFO_SIZE;
 
     return tempPtr;
 }

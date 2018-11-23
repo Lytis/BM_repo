@@ -450,6 +450,14 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f7xx_hal_msp.c</FilePath>
             </File>
+<<<<<<< HEAD
+=======
+            <File>
+              <FileName>fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\fifo.c</FilePath>
+            </File>
+>>>>>>> parent of 4250c54... log_added
           </Files>
         </Group>
         <Group>

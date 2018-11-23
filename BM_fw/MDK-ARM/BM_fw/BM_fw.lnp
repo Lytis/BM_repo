@@ -12,6 +12,10 @@
 "bm_fw\usbd_audio_if.o"
 "bm_fw\stm32f7xx_it.o"
 "bm_fw\stm32f7xx_hal_msp.o"
+<<<<<<< HEAD
+=======
+"bm_fw\fifo.o"
+>>>>>>> parent of 4250c54... log_added
 "bm_fw\stm32f7xx_hal_pcd.o"
 "bm_fw\stm32f7xx_hal_pcd_ex.o"
 "bm_fw\stm32f7xx_ll_usb.o"
