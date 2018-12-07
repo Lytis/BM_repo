@@ -1,5 +1,7 @@
 --cpu Cortex-M7.fp.dp
 "bm_fw\startup_stm32f767xx.o"
+"bm_fw\fifo.o"
+"bm_fw\filesystem.o"
 "bm_fw\main.o"
 "bm_fw\bsp_driver_sd.o"
 "bm_fw\sd_diskio.o"
@@ -10,8 +12,6 @@
 "bm_fw\usbd_audio_if.o"
 "bm_fw\stm32f7xx_it.o"
 "bm_fw\stm32f7xx_hal_msp.o"
-"bm_fw\fifo.o"
-"bm_fw\filesystem.o"
 "bm_fw\stm32f7xx_hal_pcd.o"
 "bm_fw\stm32f7xx_hal_pcd_ex.o"
 "bm_fw\stm32f7xx_ll_usb.o"

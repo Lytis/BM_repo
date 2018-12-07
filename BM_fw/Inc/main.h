@@ -67,6 +67,12 @@
 #define SPI5_DIR_GPIO_Port GPIOF
 #define SD_sense_Pin GPIO_PIN_5
 #define SD_sense_GPIO_Port GPIOC
+#define REC_Pin GPIO_PIN_13
+#define REC_GPIO_Port GPIOB
+#define REC_EXTI_IRQn EXTI15_10_IRQn
+#define BUTTON_1_Pin GPIO_PIN_15
+#define BUTTON_1_GPIO_Port GPIOB
+#define BUTTON_1_EXTI_IRQn EXTI15_10_IRQn
 #define RED_Pin GPIO_PIN_2
 #define RED_GPIO_Port GPIOG
 #define YELLOW_Pin GPIO_PIN_3
