@@ -176,7 +176,7 @@ int main(void)
   HAL_SPI_Receive_DMA(&hspi6, (uint8_t*)receiveBuffer6, BUFFER_SIZE);
   HAL_SPI_Receive_DMA(&hspi3, (uint8_t*)receiveBuffer3, BUFFER_SIZE);
 
-  
+  start_new_session();
 
   //HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
 

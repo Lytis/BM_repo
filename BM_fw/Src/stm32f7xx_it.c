@@ -261,7 +261,7 @@ void EXTI15_10_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
 
-  HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
+  //HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
 
   if (recording == true)
   {
@@ -272,10 +272,15 @@ void EXTI15_10_IRQHandler(void)
   }else
   {
     //new session
-    start_new_session();
+    
     if (firstRec == true)
     {
       firstRec = false;
+      HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
+    }else
+    {
+      HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_RESET);
+      start_new_session();
       HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
     }
     recording = true;
@@ -289,7 +294,7 @@ void EXTI15_10_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  //HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
   /* USER CODE END EXTI15_10_IRQn 1 */
 }

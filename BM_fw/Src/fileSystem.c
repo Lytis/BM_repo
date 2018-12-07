@@ -19,10 +19,12 @@ extern bool recording;
 FATFS mynewdiskFatFs;
 FIL File, logFile;
 UINT *dataWr;
+FRESULT errCode;
+
 char mynewdiskPath[4];
-char dataFileName[] = "data_00.hex";
-char logFileName[] = "logfile.log";
-char logMsg[] = "log:data_00.hex\n";
+static char dataFileName[] = "data_00.hex";
+static char logFileName[] = "logfile.log";
+static char logMsg[] = "log:data_00.hex\n";
 
 int file_no = 0;
 int file_size = 0, logs = 0;
@@ -44,7 +46,7 @@ void init_file_system()
 
 void start_new_session()
 {
-    FRESULT errCode;
+    
 
     errCode = f_open(&logFile, logFileName, FA_OPEN_ALWAYS|FA_WRITE);
 
@@ -60,7 +62,7 @@ void start_new_session()
       HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
     }
 
-    HAL_Delay(500);
+    //HAL_Delay(500);
     HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
 
@@ -82,7 +84,7 @@ void start_new_session()
 
     errCode = f_close(&logFile);
 
-    HAL_Delay(500);
+    //HAL_Delay(500);
     HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
 
