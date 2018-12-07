@@ -153,7 +153,7 @@ int main(void)
 
 
   init_file_system();
-  start_new_session();
+  //start_new_session();
 
   /* USER CODE END 2 */
 
@@ -178,7 +178,7 @@ int main(void)
 
   
 
-  HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
+  //HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
 
 
   while (1)
@@ -499,7 +499,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : REC_Pin BUTTON_1_Pin */
   GPIO_InitStruct.Pin = REC_Pin|BUTTON_1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 

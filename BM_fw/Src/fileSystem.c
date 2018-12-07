@@ -10,8 +10,11 @@
 #include "storage.h"
 #include "ff.h"
 
+#include <stdbool.h>
 
 
+extern bool closeSession;
+extern bool recording;
 
 FATFS mynewdiskFatFs;
 FIL File, logFile;
@@ -28,14 +31,12 @@ int file_size = 0, logs = 0;
 void init_file_system()
 {
 
-    
-  int file_no = 0;
-  int file_size = 0, logs = 0;
-
   if(f_mount(&mynewdiskFatFs, (TCHAR const*)mynewdiskPath,0) == FR_OK)
   {
     file_no = 0;
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
     HAL_Delay(500); // time to sellte the SD card init
+    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
   }
 
 }
@@ -43,7 +44,11 @@ void init_file_system()
 
 void start_new_session()
 {
-    if (f_open(&logFile, logFileName, FA_OPEN_ALWAYS|FA_WRITE) == FR_OK)
+    FRESULT errCode;
+
+    errCode = f_open(&logFile, logFileName, FA_OPEN_ALWAYS|FA_WRITE);
+
+    if (errCode == FR_OK)
     {
         file_size = f_size(&logFile);
         logs = file_size / sizeof(logMsg);
@@ -62,7 +67,9 @@ void start_new_session()
     sprintf(dataFileName, "data_%.2d.hex", file_no);
     sprintf(logMsg, "log: data_%.2d.hex\n", file_no);
 
-    if (f_open(&File, dataFileName, FA_CREATE_ALWAYS|FA_WRITE) == FR_OK)
+    errCode = f_open(&File, dataFileName, FA_CREATE_ALWAYS|FA_WRITE);
+
+    if (errCode == FR_OK)
     {
       HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
       f_lseek(&logFile, file_size);
@@ -73,7 +80,7 @@ void start_new_session()
       HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
     }
 
-    f_close(&logFile);
+    errCode = f_close(&logFile);
 
     HAL_Delay(500);
     HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);

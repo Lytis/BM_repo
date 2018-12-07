@@ -52,3 +52,4 @@ bm_fw\filesystem.o: ../Inc/usbd_conf.h
 bm_fw\filesystem.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 bm_fw\filesystem.o: ..\Src\fifo.h
 bm_fw\filesystem.o: ..\Src\storage.h
+bm_fw\filesystem.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

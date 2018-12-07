@@ -43,6 +43,9 @@
 #include "usbd_audio.h"
 #include "fileSystem.h"
 
+#include <stdio.h>
+#include <stdbool.h>
+
 
 extern SPI_HandleTypeDef hspi2;
 extern USBD_HandleTypeDef hUsbDeviceFS;
@@ -67,6 +70,10 @@ int flag5 = NOT_STARTED,flag4 = NOT_STARTED, flag6 = NOT_STARTED, flag3 = NOT_ST
 
 int packetCounter = 0;  //10 msec per packet
 
+bool closeSession = false;
+bool recording = false;
+bool lastPacketRecord = false;
+bool firstRec = true;
 
 UINT *dataWriten;
 extern FIL File;
@@ -254,10 +261,35 @@ void EXTI15_10_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
 
+  HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
+
+  if (recording == true)
+  {
+    recording = false;
+    lastPacketRecord = true;
+    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+    //close_session();
+  }else
+  {
+    //new session
+    start_new_session();
+    if (firstRec == true)
+    {
+      firstRec = false;
+      HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
+    }
+    recording = true;
+    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
+    //HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
+  }
+
+
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
@@ -398,7 +430,6 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 {
   int i;
 
-  
 
   if (hspi->Instance == SPI3)
   {
@@ -427,6 +458,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
       ((flag5==FULL_READY)||(flag5==NOT_STARTED))&&
       ((flag6==FULL_READY)||(flag6==NOT_STARTED)))
   {
+
     for (i=BUFFER_SIZE/2; i<BUFFER_SIZE; i++)
     {
       storageBuffer[i+3*BUFFER_SIZE] = receiveBuffer3[i];
@@ -434,7 +466,10 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
       storageBuffer[i] = receiveBuffer5[i];
       storageBuffer[i+2*BUFFER_SIZE] = receiveBuffer6[i];
     }
-    f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
+    if (recording == true)
+    {
+      f_write(&File, &storageBuffer[0], sizeof(storageBuffer),dataWriten);
+    }
     flag3 = NOT_STARTED;
     flag4 = NOT_STARTED;
     flag5 = NOT_STARTED;
@@ -444,11 +479,13 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
   HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
   
 
-  if (packetCounter >= 500)
+  if (lastPacketRecord == true)
   {
     //HAL_SPI_DMAPause(hspi);
-    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
+    //HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
     close_session();
+    lastPacketRecord = false;
+    recording = false;
   }
 
   fifo_put(&receiveBuffer6[BUFFER_SIZE/2], 2);
