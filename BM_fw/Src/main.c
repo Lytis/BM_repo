@@ -152,7 +152,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
   init_file_system();
+
   //start_new_session();
 
   /* USER CODE END 2 */
@@ -178,7 +182,11 @@ int main(void)
 
   start_new_session();
 
-  //HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+
+  HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
 
 
   while (1)

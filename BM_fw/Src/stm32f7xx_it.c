@@ -267,25 +267,15 @@ void EXTI15_10_IRQHandler(void)
   {
     recording = false;
     lastPacketRecord = true;
-    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
     //close_session();
   }else
   {
     //new session
-    
-    if (firstRec == true)
-    {
-      firstRec = false;
-      HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
-    }else
-    {
-      HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_RESET);
-      start_new_session();
-      HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
-    }
+    start_new_session();
+  
     recording = true;
-    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
-    //HAL_GPIO_WritePin(CLK_OUT_EN_GPIO_Port, CLK_OUT_EN_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
   }
 
 
@@ -456,7 +446,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
 
   packetCounter++;
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
 
   if (((flag3==FULL_READY)||(flag3==NOT_STARTED))&&
       ((flag4==FULL_READY)||(flag4==NOT_STARTED))&&
@@ -481,13 +471,11 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef * hspi)
     flag6 = NOT_STARTED;
   }
 
-  HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
   
 
   if (lastPacketRecord == true)
   {
-    //HAL_SPI_DMAPause(hspi);
-    //HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
     close_session();
     lastPacketRecord = false;
     recording = false;

@@ -576,11 +576,11 @@ static uint8_t  USBD_AUDIO_SOF (USBD_HandleTypeDef *pdev)
   haudio = (USBD_AUDIO_HandleTypeDef*) pdev->pClassData;
   if (haudio->alt_setting == 1)
   {
-    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
     USB_fifo_use = 1;
   }else
   {
-    HAL_GPIO_WritePin(YELLOW_GPIO_Port, YELLOW_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_RESET);
     USB_fifo_use = 0;
   }
   return USBD_OK;

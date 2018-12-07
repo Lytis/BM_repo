@@ -16,14 +16,6 @@ double t = 0, dt = 4.16e-5, w = 2512, ramp = 0, dramp = 1e-4;
 void put_samples(int16_t sample)
 {
     
-    /* t += dt;
-    ramp +=dramp;
-    if (ramp >= 1)
-    {
-        ramp = 0;
-    }
-    double S = ramp*32767*sin(w*t);
-    sample = (int16_t)S; */
     USB_fifo [Pwr][Swr] = sample;
 
     if (USB_fifo_use == 1)
